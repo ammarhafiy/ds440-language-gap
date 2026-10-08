@@ -5,7 +5,7 @@ Ammar Hafiy Bin Hamdan Kamil
 
 ## Research Question
 
-<!-- Write your research question here in your own words. -->
+When AI chatbots answer sports questions less accurately in Malay, is that because of the language, a lack of knowledge about local sports, or a mix of both?
 
 ## Study Design
 
@@ -22,7 +22,9 @@ Web search is turned off for all chatbots.
 
 ## Hypotheses
 
-<!-- List H1-H3 here in your own words. -->
+I predict that the chatbots will be more accurate in English than Malay overall, and that the biggest gap will be on the Malay questions about regional sports. I also predict that giving the chatbot the relevant facts in the prompt will raise its Malay accuracy on regional questions and narrow the gap.
+
+<!-- Update to formal H1-H3 to match Report 2. -->
 
 ## Repository Structure
 
@@ -51,6 +53,6 @@ A fact is only used if at least two sources agree.
 
 ## Generative AI Disclosure
 
-The initial folder structure, file templates, and this README template were created with Claude (Anthropic).
+The initial folder structure, file templates, this README template, and the English question templates in `data/questions.csv` were created with Claude (Anthropic). The research question and hypotheses above are copied from my own Report 1.
 Research content (research question, hypotheses, question set, translations, scoring decisions, and analysis) is my own.
 <!-- Update this section whenever AI is used for code or other parts of the project. -->
