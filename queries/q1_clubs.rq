@@ -1,0 +1,18 @@
+# Q1: How many clubs does each league have on Wikidata,
+# and how many have stable facts (home city, stadium, founding year, Malay name)?
+# Run at https://query.wikidata.org on 2026-10-13. Results: results/q1_clubs_2026-10-13.csv
+
+SELECT ?leagueLabel (COUNT(DISTINCT ?club) AS ?clubs)
+  (COUNT(DISTINCT ?c1) AS ?with_city) (COUNT(DISTINCT ?c2) AS ?with_stadium)
+  (COUNT(DISTINCT ?c3) AS ?with_founded) (COUNT(DISTINCT ?c4) AS ?with_malay_name)
+WHERE {
+  VALUES ?name { "Malaysia Super League"@en "National Basketball Association"@en }
+  ?league rdfs:label ?name .
+  ?club wdt:P118 ?league .
+  OPTIONAL { ?club wdt:P159|wdt:P131 ?x1 . BIND(?club AS ?c1) }
+  OPTIONAL { ?club wdt:P115 ?x2 . BIND(?club AS ?c2) }
+  OPTIONAL { ?club wdt:P571 ?x3 . BIND(?club AS ?c3) }
+  OPTIONAL { ?club rdfs:label ?l . FILTER(LANG(?l) = "ms") BIND(?club AS ?c4) }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+GROUP BY ?leagueLabel

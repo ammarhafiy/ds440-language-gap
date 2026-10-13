@@ -1,0 +1,19 @@
+# Q2: How many players are linked to each league's clubs on Wikidata,
+# and how many have stable facts (country, birthplace, birth date, position)?
+# Run at https://query.wikidata.org on 2026-10-13. Results: results/q2_players_2026-10-13.csv
+
+SELECT ?leagueLabel (COUNT(DISTINCT ?player) AS ?players)
+  (COUNT(DISTINCT ?p1) AS ?with_country) (COUNT(DISTINCT ?p2) AS ?with_birthplace)
+  (COUNT(DISTINCT ?p3) AS ?with_birthdate) (COUNT(DISTINCT ?p4) AS ?with_position)
+WHERE {
+  VALUES ?name { "Malaysia Super League"@en "National Basketball Association"@en }
+  ?league rdfs:label ?name .
+  ?club wdt:P118 ?league .
+  ?player wdt:P54 ?club ; wdt:P31 wd:Q5 .
+  OPTIONAL { ?player wdt:P27 ?x1 . BIND(?player AS ?p1) }
+  OPTIONAL { ?player wdt:P19 ?x2 . BIND(?player AS ?p2) }
+  OPTIONAL { ?player wdt:P569 ?x3 . BIND(?player AS ?p3) }
+  OPTIONAL { ?player wdt:P413 ?x4 . BIND(?player AS ?p4) }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+GROUP BY ?leagueLabel

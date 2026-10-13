@@ -1,0 +1,23 @@
+# Q3: How well documented are each league's players online?
+#   avg_wikipedia_pages  = average number of Wikimedia site links per player
+#                          (mostly Wikipedia pages in different languages)
+#   with_malay_wikipedia = number of players who have a Malay Wikipedia (ms.wikipedia.org) page
+# Only clubs with a home venue (P115) are counted, so non-team items are left out.
+# Run once per league: as written for the Malaysia Super League, then again with
+# "National Basketball Association"@en in place of "Malaysia Super League"@en.
+# Run at https://query.wikidata.org on 2026-10-13. Results: results/q3_popularity_2026-10-13.csv
+
+SELECT (COUNT(?player) AS ?players) (AVG(?links) AS ?avg_wikipedia_pages)
+  (SUM(?hasMs) AS ?with_malay_wikipedia)
+WHERE {
+  {
+    SELECT ?player (SAMPLE(?l) AS ?links) (MAX(?ms) AS ?hasMs) WHERE {
+      ?league rdfs:label "Malaysia Super League"@en .
+      ?club wdt:P118 ?league ; wdt:P115 ?venue .
+      ?player wdt:P54 ?club ; wdt:P31 wd:Q5 ; wikibase:sitelinks ?l .
+      OPTIONAL { ?article schema:about ?player ;
+                          schema:isPartOf <https://ms.wikipedia.org/> . }
+      BIND(IF(BOUND(?article), 1, 0) AS ?ms)
+    } GROUP BY ?player
+  }
+}
