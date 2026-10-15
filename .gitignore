@@ -16,5 +16,5 @@ Thumbs.db
 .vscode/
 .idea/
 
-   # Large downloads (re-download with the link in scripts/README.md)
-   data/raw/mkqa.jsonl.gz
+# Large downloads (re-download with the link in scripts/README.md)
+data/raw/mkqa.jsonl.gz
