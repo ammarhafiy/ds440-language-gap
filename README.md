@@ -49,9 +49,13 @@ Queries and full results are in `queries/`.
 
 ```
 data/
+  templates.csv        # Question and fact templates (English + Malay)
+  league_terms.csv     # Words used for each league (e.g. "footballer"), English + Malay
+  raw/                 # Wikidata downloads (made by scripts/01_get_wikidata.py)
+  questions/           # Question sets (made by scripts/02 and 03)
   pilot/               # 20 hand-written pilot questions (English + Malay), used to test scripts
   responses/           # Collected chatbot responses (one CSV per model/run)
-queries/               # Wikidata SPARQL queries and their results
+queries/               # Wikidata SPARQL queries used for the coverage check
 scripts/               # Code for building questions, collecting and scoring responses
 results/               # Tables and figures
 notes/
@@ -66,10 +70,17 @@ notes/
 
 ## How to Run
 
-<!-- Add instructions once scripts are written. -->
+Requires Python 3.9 or newer. See `scripts/README.md` for details, including how to run everything in Google Colab.
+
+```
+pip install -r requirements.txt
+python scripts/01_get_wikidata.py     # download players and clubs from Wikidata
+python scripts/02_build_questions.py  # build the question set
+python scripts/03_mkqa_sports.py      # find MKQA sports questions (needs data/raw/mkqa.jsonl.gz)
+```
 
 ## Generative AI Disclosure
 
-The initial folder structure, file templates, this README template, and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The October 2026 update to this README was also prepared with Claude. The research question and hypotheses above are copied from my own Report 1.
+The initial folder structure, file templates, this README template, and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The October 2026 updates to this README were also prepared with Claude. The scripts in `scripts/`, the English question templates in `data/templates.csv` and `data/league_terms.csv`, and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. The Malay templates are my own translations. The research question and hypotheses above are copied from my own Report 1.
 Research content (research question, hypotheses, translations, scoring decisions, and analysis) is my own.
 <!-- Update this section whenever AI is used for code or other parts of the project. -->

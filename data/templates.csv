@@ -1,0 +1,6 @@
+template_id,entity_type,property,use,question_en,question_ms,fact_en,fact_ms,notes
+P1,player,birthplace,yes,Where was the {desc} {name} born?,Di manakah {desc} {name} dilahirkan?,The {desc} {name} was born in {answer}.,{desc} {name} dilahirkan di {answer}.,Only players with exactly one birthplace on Wikidata are used.
+P2,player,birth_year,yes,In which year was the {desc} {name} born?,Pada tahun berapakah {desc} {name} dilahirkan?,The {desc} {name} was born in {answer}.,{desc} {name} dilahirkan pada {answer}.,Only players with exactly one birth year on Wikidata are used.
+C1,club,home_city,yes,In which city is the {desc} {name} based?,Di bandar manakah {desc} {name} berpangkalan?,The {desc} {name} is based in {answer}.,{desc} {name} berpusat di {answer}.,Uses headquarters location (P159); falls back to located in (P131).
+C2,club,founded_year,yes,In which year was the {desc} {name} founded?,Pada tahun berapakah {desc} {name} diasaskan?,The {desc} {name} was founded in {answer}.,{desc} {name} tersebut diasaskan pada {answer}.,Uses inception (P571).
+C3,club,stadium,no,What is the home stadium of the {desc} {name}?,,The home stadium of the {desc} {name} is {answer}.,,Off by default: clubs can change stadiums over time. Set use to yes to include.
