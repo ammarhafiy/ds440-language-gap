@@ -104,8 +104,18 @@ def main():
                 "keep": "",
             })
 
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT_PATH, "w", newline="", encoding="utf-8-sig") as f:
+    # Never overwrite a file that has already been reviewed (keep column filled in):
+    # write the new candidate list next to it instead, so the two can be compared.
+    out_path = OUT_PATH
+    if OUT_PATH.exists():
+        with open(OUT_PATH, newline="", encoding="utf-8-sig") as f:
+            reviewed = any((r.get("keep") or "").strip() for r in csv.DictReader(f))
+        if reviewed:
+            out_path = OUT_PATH.with_name("mkqa_sports_candidates_new.csv")
+            print(f"NOTE: {OUT_PATH.name} has already been reviewed, so it is not overwritten.")
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=COLUMNS)
         writer.writeheader()
         writer.writerows(rows)
@@ -113,8 +123,9 @@ def main():
     flagged = sum(r["maybe_time_sensitive"] == "yes" for r in rows)
     print(f"Read {total} MKQA questions; {len(rows)} look like sports questions "
           f"({flagged} flagged as maybe time-sensitive).")
-    print(f"Saved to {OUT_PATH}")
-    print('Next: open the file and fill in the "keep" column with yes or no for each row.')
+    print(f"Saved to {out_path}")
+    if out_path == OUT_PATH:
+        print('Next: open the file and fill in the "keep" column with yes or no for each row.')
 
 
 if __name__ == "__main__":
