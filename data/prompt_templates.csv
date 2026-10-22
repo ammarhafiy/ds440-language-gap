@@ -1,0 +1,3 @@
+language,instruction,fact_label,question_label
+en,"Answer with a short answer only, in the same language as the question.",Fact:,Question:
+ms,"Berikan jawapan ringkas sahaja, dalam bahasa yang sama dengan soalan tersebut.",Fakta:,Soalan:
