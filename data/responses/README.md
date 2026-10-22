@@ -1,9 +1,7 @@
 # Responses
 
-Save chatbot responses here, one CSV per model and collection run, using the columns in `responses_template.csv`.
+Chatbot replies collected by `scripts/05_collect_responses.py`, one CSV per provider and model (for example `openai_<model>.csv`). Pilot runs end in `_pilot.csv`.
 
-- `language`: `en` or `ms`
-- `condition`: `no_facts` or `with_facts`
-- `web_search`: should always be `off`
-- `reply_language`: the language the chatbot actually replied in
-- `score`: from the scoring rubric in `notes/scoring_rubric.md`
+Every column is described in `data/README.md` (section "responses/"). Replies are scored with the rules in `notes/scoring_rubric.md`.
+
+No replies have been collected yet.
