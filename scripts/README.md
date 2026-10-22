@@ -9,6 +9,7 @@ Run the scripts in order from the repository folder. Each one prints a short sum
 | `03_mkqa_sports.py` | Finds the sports questions in MKQA for manual review | `data/questions/mkqa_sports_candidates.csv` |
 | `04_combine_questions.py` | Combines the Wikidata questions and the kept MKQA questions, cleans the accepted answers, and writes every prompt | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | `05_collect_responses.py` | Sends the prompts to a chatbot API and saves every reply | `data/responses/<provider>_<model>.csv` |
+| `06_score.py` | Scores every reply against the accepted answers and makes an accuracy table per group (95% Wilson confidence intervals) | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
 
 ## Before running
 
@@ -76,7 +77,20 @@ python scripts/05_collect_responses.py --provider openai --model MODEL_NAME
 
 Defaults: temperature 0 and a maximum reply length of 50 tokens. Check the pilot file: if replies are empty or cut off (`finish_reason` shows the length limit), raise `--max-tokens`. Some newer models count hidden "thinking" toward this limit, and some do not accept a temperature setting; use `--temperature none` for those.
 
+## Scoring replies (script 06)
+
+```
+# score every file in data/responses/
+python scripts/06_score.py
+
+# or only one file
+python scripts/06_score.py --files data/responses/gemini_gemini-3.1-flash-lite_pilot.csv
+```
+
+It prints the accuracy table and saves the scored replies in `data/scored/` and the table in `results/`. The rules are in `notes/scoring_rubric.md`. No API key is needed.
+
 ## After running
 
 - Check that `data/responses/..._pilot.csv` has a reply in every row and that the `error` column is empty.
+- Look through `data/scored/..._scored.csv`: for each reply marked 0, check that it really is wrong.
 - Spot-check questions against Wikipedia (a random sample of 20 Wikidata questions and all 88 MKQA questions).

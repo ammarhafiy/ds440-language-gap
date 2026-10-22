@@ -68,8 +68,13 @@ Queries and full results are in `queries/`. The 15 October download used for the
 | 3. Find MKQA sports questions | `scripts/03_mkqa_sports.py` | `data/questions/mkqa_sports_candidates.csv` (then reviewed: `keep` column) |
 | 4. Combine questions and write prompts | `scripts/04_combine_questions.py` | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | 5. Collect chatbot replies | `scripts/05_collect_responses.py` | `data/responses/<provider>_<model>.csv` |
+| 6. Score replies | `scripts/06_score.py` | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
 
-Scoring and analysis scripts will be added next. Every column of every data file is described in [`data/README.md`](data/README.md).
+Statistical analysis scripts will be added next. Every column of every data file is described in [`data/README.md`](data/README.md).
+
+## Pilot (22 October 2026)
+
+20 questions sampled with seed 440 (66 prompts) were sent to Gemini 3.1 Flash-Lite (free tier, temperature 0) to test the pipeline. All 66 replies were collected without errors and scored with `scripts/06_score.py`. A manual check of all 66 replies (first pass done with Claude, then confirmed by me) agreed with every automatic score after two fixes found in the pilot: numbers written as words ("four", "empat") and dates in other formats ("September 6, 2018"). An earlier attempt with Gemini 3.8 Flash stopped after 11 replies because the free tier's daily request limit was reached. The pilot is a test of the pipeline, not a result: the samples are far too small to draw conclusions.
 
 ## How to Run
 
@@ -82,6 +87,7 @@ python scripts/02_build_questions.py    # build the Wikidata questions (fixed se
 python scripts/03_mkqa_sports.py        # find MKQA sports questions (needs data/raw/mkqa.jsonl.gz)
 python scripts/04_combine_questions.py  # final question set + all prompts
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pilot 20
+python scripts/06_score.py              # score all replies + accuracy tables
 ```
 
 Step 1 queries the live Wikidata service, so running it again later can give slightly different data. To reproduce this study exactly, skip step 1 and use the saved download in `data/raw/` (15 October 2026).
@@ -99,10 +105,13 @@ data/
   questions/              # Question sets made by scripts 02-04
   prompts/                # Every prompt sent to the chatbots (script 04)
   responses/              # Chatbot replies, one CSV per provider/model (script 05)
+  scored/                 # Replies with automatic scores and flags (script 06)
   pilot/                  # 20 hand-written pilot questions from week 1 (no longer used)
+results/                  # Accuracy tables with 95% confidence intervals (script 06)
 queries/                  # Wikidata SPARQL queries used for the coverage check
-scripts/                  # Pipeline scripts 01-05
+scripts/                  # Pipeline scripts 01-06
 notes/
+  scoring_rubric.md       # Scoring rules
   weekly_log.md           # Weekly log of time spent, progress, and blockers
 ```
 
@@ -121,5 +130,5 @@ notes/
 
 ## Generative AI Disclosure
 
-The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–05) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the answer fixes in `data/mkqa_answer_fixes.csv`; I am re-checking all kept questions and a random sample of the rejected ones. The research question and hypotheses are my own (Reports 1 and 2).
+The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–06) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the answer fixes in `data/mkqa_answer_fixes.csv`; I am re-checking all kept questions and a random sample of the rejected ones. The research question and hypotheses are my own (Reports 1 and 2).
 <!-- Update this section whenever AI is used for code or other parts of the project. -->

@@ -137,3 +137,26 @@ One file per provider and model, e.g. `openai_<model>.csv`; pilot runs end in `_
 | `response` | Raw reply text |
 | `finish_reason` | Why the model stopped (e.g. finished, or hit the length limit) |
 | `error` | Error message if the request failed (failed prompts are retried on the next run) |
+
+## `scored/`: scored replies (script 06)
+One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus:
+
+| Column | Meaning |
+|---|---|
+| `answer_en`, `answer_ms` | Main correct answer, copied from `questions_final.csv` |
+| `score` | `1` = correct, `0` = incorrect, empty = request failed (not scored) |
+| `matched_answer` | The accepted answer found in the reply (normalized) |
+| `refusal` | `1` if the reply is empty or says it does not know (e.g. "I don't know", "tidak pasti") |
+| `reply_language` | `en`, `ms`, or `unknown` (guessed from common words; a reply with only a name or a year is `unknown`) |
+| `language_match` | `1` if the reply is in the language of the question, `0` if not, empty if unknown |
+
+## `../results/`: accuracy tables (script 06)
+`results/accuracy_<name>.csv`, one row per group:
+
+| Column | Meaning |
+|---|---|
+| `source`, `league`, `language`, `condition` | The group |
+| `n`, `correct` | Number of scored replies and number correct |
+| `accuracy` | `correct / n` |
+| `ci_low`, `ci_high` | 95% Wilson confidence interval for the accuracy |
+| `refusals` | Number of refusals in the group |
