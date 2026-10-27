@@ -11,6 +11,11 @@ Run after 04_combine_questions.py. Examples:
     # full run (can be stopped and restarted; finished prompts are skipped)
     python scripts/05_collect_responses.py --provider anthropic --model MODEL_NAME
 
+    # SEA-LION (OpenAI-compatible API), with its "thinking" turned off
+    python scripts/05_collect_responses.py --provider openai --base-url https://api.sea-lion.ai/v1 \
+        --api-key-env SEALION_API_KEY --model MODEL_NAME --sleep 6 \
+        --extra-body '{"chat_template_kwargs": {"enable_thinking": false}}'
+
 Providers:
     openai     OpenAI Chat Completions API            key in OPENAI_API_KEY
                (also any OpenAI-compatible API with --base-url and --api-key-env)
@@ -29,6 +34,7 @@ Writes:  data/responses/<provider>_<model>[_pilot].csv   (one row per prompt)
 """
 import argparse
 import csv
+import json
 import os
 import random
 import sys
@@ -119,7 +125,8 @@ def call_openai(prompt, args, key):
             "max_completion_tokens": args.max_tokens}
     if args.temperature is not None:
         body["temperature"] = args.temperature
-    r = requests.post(url, headers={"Authorization": f"Bearer {key}"}, json=body, timeout=60)
+    body.update(args.extra_body)
+    r = requests.post(url, headers={"Authorization": f"Bearer {key}"}, json=body, timeout=120)
     r.raise_for_status()
     data = r.json()
     choice = data["choices"][0]
@@ -189,10 +196,19 @@ def main():
     parser.add_argument("--sleep", type=float, default=0.5, help="seconds to wait between requests")
     parser.add_argument("--base-url", default="", help="for OpenAI-compatible APIs (openai provider only)")
     parser.add_argument("--api-key-env", default="", help="name of the environment variable that holds the key")
+    parser.add_argument("--extra-body", default="",
+                        help="JSON with extra settings added to every request (openai provider only), "
+                             "e.g. '{\"chat_template_kwargs\": {\"enable_thinking\": false}}'")
     parser.add_argument("--out", default="", help="output CSV (default: data/responses/<provider>_<model>.csv)")
     parser.add_argument("--dry-run", action="store_true", help="show what would be sent; no API calls")
     args = parser.parse_args()
     args.temperature = None if args.temperature.lower() == "none" else float(args.temperature)
+    try:
+        args.extra_body = json.loads(args.extra_body) if args.extra_body else {}
+    except json.JSONDecodeError as e:
+        sys.exit(f"--extra-body is not valid JSON: {e}")
+    if args.extra_body and args.provider != "openai":
+        sys.exit("--extra-body only works with --provider openai.")
 
     prompts = read_prompts()
     if args.pilot:
@@ -202,10 +218,12 @@ def main():
     out_path = Path(args.out) if args.out else RESPONSES_DIR / f"{name}.csv"
     finished = done_ids(out_path, rewrite=not args.dry_run)
     todo = [p for p in prompts if p["prompt_id"] not in finished]
+    already_done = len(prompts) - len(todo)
     if args.limit:
         todo = todo[:args.limit]
 
-    print(f"{len(prompts)} prompts selected, {len(prompts) - len(todo)} already done, {len(todo)} to send.")
+    note = f" (limited by --limit {args.limit})" if args.limit else ""
+    print(f"{len(prompts)} prompts selected, {already_done} already done, {len(todo)} to send{note}.")
     print(f"Output: {out_path}")
 
     if args.dry_run:
@@ -229,6 +247,9 @@ def main():
             writer.writeheader()
         for i, p in enumerate(todo, 1):
             text, model_returned, finish, error = ask(p["prompt"], args, key)
+            if not error and not text.strip():
+                # e.g. a "thinking" model that used up all its tokens before answering
+                error = f"empty reply (finish_reason: {finish})"
             errors += bool(error)
             writer.writerow({
                 "prompt_id": p["prompt_id"], "question_id": p["question_id"], "source": p["source"],

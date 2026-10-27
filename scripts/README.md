@@ -75,7 +75,17 @@ python scripts/05_collect_responses.py --provider openai --model MODEL_NAME
 | Google Gemini | `gemini` | `GEMINI_API_KEY` |
 | Any OpenAI-compatible API (e.g. SEA-LION; check its documentation for the address) | `openai` with `--base-url URL --api-key-env NAME` | the name you choose |
 
-Defaults: temperature 0 and a maximum reply length of 50 tokens. Check the pilot file: if replies are empty or cut off (`finish_reason` shows the length limit), raise `--max-tokens`. Some newer models count hidden "thinking" toward this limit, and some do not accept a temperature setting; use `--temperature none` for those.
+Defaults: temperature 0 and a maximum reply length of 50 tokens. Check the pilot file: if replies are empty or cut off (`finish_reason` shows the length limit), raise `--max-tokens`. Some newer models count hidden "thinking" toward this limit, and some do not accept a temperature setting; use `--temperature none` for those. An empty reply is recorded as an error, so it is sent again the next time you run the same command.
+
+`--extra-body` adds extra settings to every request (OpenAI-compatible APIs only). SEA-LION example, with the model's "thinking" turned off so it answers directly:
+
+```
+python scripts/05_collect_responses.py --provider openai --base-url https://api.sea-lion.ai/v1 \
+  --api-key-env SEALION_API_KEY --model MODEL_NAME --sleep 6 \
+  --extra-body '{"chat_template_kwargs": {"enable_thinking": false}}'
+```
+
+SEA-LION's free API allows 10 requests per minute, so use `--sleep 6`.
 
 ## Scoring replies (script 06)
 

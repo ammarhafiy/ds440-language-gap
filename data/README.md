@@ -136,7 +136,7 @@ One file per provider and model, e.g. `openai_<model>.csv`; pilot runs end in `_
 | `timestamp_utc` | When the reply was received |
 | `response` | Raw reply text |
 | `finish_reason` | Why the model stopped (e.g. finished, or hit the length limit) |
-| `error` | Error message if the request failed (failed prompts are retried on the next run) |
+| `error` | Error message if the request failed or the reply was empty (these prompts are retried on the next run) |
 
 ## `scored/`: scored replies (script 06)
 One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus:
