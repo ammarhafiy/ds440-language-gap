@@ -95,10 +95,14 @@ Rules: 500 players per league sampled with seed 440 (from players with at least 
 | `accepted_answers_en`, `accepted_answers_ms` | All accepted answers MKQA gives |
 | `matched_word` | Sports keyword that matched |
 | `maybe_time_sensitive` | `yes` if the wording suggests the answer can change ("last", "current", "most"...) |
-| `keep` | Review decision: `yes` = used in the study, `no` = left out |
-| `review_reason` | Short reason for the decision (rules: stable fact, one clear answer, correct answer key) |
+| `keep` | First-pass review decision (done with Claude): `yes` = kept, `no` = left out |
+| `review_reason` | Short reason for the first-pass decision (rules: stable fact, one clear answer, correct answer key) |
+| `recheck_keep` | My re-check (28 Oct 2026) of all 88 kept questions and 30 randomly chosen rejected ones: `yes` / `no`; empty = not re-checked |
+| `recheck_answer_ok` | Re-check of the answer key (kept questions only): `yes` / `no` |
+| `recheck_note` | Notes from the re-check (what Wikipedia says, why a question was removed) |
+| `final_keep` | Final decision used by script 04: `yes` = used in the study (79 questions) |
 
-### `questions_final.csv`: final question set, 2,151 questions (script 04)
+### `questions_final.csv`: final question set, 2,142 questions (script 04)
 | Column | Meaning |
 |---|---|
 | `question_id` | Wikidata IDs as above; MKQA questions are `mkqa-<example_id>` |
@@ -112,9 +116,9 @@ Rules: 500 players per league sampled with seed 440 (from players with at least 
 | `sitelinks`, `has_malay_wikipedia` | As above (Wikidata players only) |
 | `source_id` | Wikidata QID or MKQA example ID |
 
-Cleaning of `accepted_answers` (script 04): answers listed in `mkqa_answer_fixes.csv` are removed; aliases with no letters or digits (e.g. flag emojis), aliases of one or two characters (except KL, PJ, JB, NY, NJ, SF) and short everyday words (e.g. "can" for Canada) are removed, because scoring is not case-sensitive and they would match ordinary words; numbers are always kept. For MKQA date answers, the year alone is also accepted unless the year already appears in the question.
+Cleaning of `accepted_answers` (script 04): only MKQA questions with `final_keep` = `yes` are included; answers listed in `mkqa_answer_fixes.csv` are removed; aliases with no letters or digits (e.g. flag emojis), aliases of one or two characters (except KL, PJ, JB, NY, NJ, SF) and short everyday words (e.g. "can" for Canada) are removed, because scoring is not case-sensitive and they would match ordinary words; numbers are always kept. For MKQA date answers, the year alone is also accepted unless the year already appears in the question.
 
-## `prompts/prompts.csv`: every prompt (script 04)
+## `prompts/prompts.csv`: every prompt (script 04), 8,410 rows
 | Column | Meaning |
 |---|---|
 | `prompt_id` | `<question_id>-<language>-<condition>` |
@@ -139,7 +143,7 @@ One file per provider and model, e.g. `openai_<model>.csv`; pilot runs end in `_
 | `error` | Error message if the request failed or the reply was empty (these prompts are retried on the next run) |
 
 ## `scored/`: scored replies (script 06)
-One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus:
+One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus the columns below. Replies to questions that are no longer in `questions_final.csv` (the 9 MKQA questions removed in the re-check) are left out.
 
 | Column | Meaning |
 |---|---|

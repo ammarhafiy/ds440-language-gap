@@ -2,12 +2,14 @@
 Step 4: combine the Wikidata and MKQA questions into one final question set,
 then write every prompt that will be sent to the chatbots.
 
-Run after 02_build_questions.py and after the MKQA review (keep column filled in):
+Run after 02_build_questions.py and after the MKQA review (keep column filled in).
+If the MKQA file has a final_keep column (the result of the re-check), it is used
+instead of keep.
     python scripts/04_combine_questions.py
 
 Reads:
     data/questions/questions_v1.csv            Wikidata questions (from script 02)
-    data/questions/mkqa_sports_candidates.csv  MKQA candidates with keep = yes / no
+    data/questions/mkqa_sports_candidates.csv  MKQA candidates with keep / final_keep = yes / no
     data/mkqa_answer_fixes.csv                 wrong or too-general MKQA answers to remove
     data/prompt_templates.csv                  prompt instruction and labels (English + Malay)
 Writes:
@@ -137,13 +139,15 @@ def mkqa_rows():
     candidates = read_csv(MKQA_PATH)
     if "keep" not in candidates[0]:
         sys.exit("The MKQA file has no 'keep' column. Run script 03 and review the questions first.")
-    unreviewed = [c for c in candidates if c["keep"].strip().lower() not in ("yes", "no")]
+    # final_keep = the decision after the re-check; keep = the first-pass review
+    decision = "final_keep" if "final_keep" in candidates[0] else "keep"
+    unreviewed = [c for c in candidates if c[decision].strip().lower() not in ("yes", "no")]
     if unreviewed:
-        print(f"NOTE: {len(unreviewed)} MKQA rows have no yes/no in the keep column; they are left out.")
+        print(f"NOTE: {len(unreviewed)} MKQA rows have no yes/no in the {decision} column; they are left out.")
 
     rows = []
     for c in candidates:
-        if c["keep"].strip().lower() != "yes":
+        if c[decision].strip().lower() != "yes":
             continue
         accepted = split(c["accepted_answers_en"]) + split(c["accepted_answers_ms"])
         # For date answers, also accept the year on its own, unless the year is already in the

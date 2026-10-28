@@ -7,7 +7,7 @@ Run the scripts in order from the repository folder. Each one prints a short sum
 | `01_get_wikidata.py` | Downloads NBA and Malaysia Super League players and clubs from Wikidata, plus English and Malay names and aliases for places | `data/raw/` |
 | `02_build_questions.py` | Picks 500 random players per league (fixed seed 440) and fills in the templates in `data/templates.csv` | `data/questions/questions_v1.csv` |
 | `03_mkqa_sports.py` | Finds the sports questions in MKQA for manual review | `data/questions/mkqa_sports_candidates.csv` |
-| `04_combine_questions.py` | Combines the Wikidata questions and the kept MKQA questions, cleans the accepted answers, and writes every prompt | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
+| `04_combine_questions.py` | Combines the Wikidata questions and the kept MKQA questions (`final_keep` = yes after the re-check), cleans the accepted answers, and writes every prompt | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | `05_collect_responses.py` | Sends the prompts to a chatbot API and saves every reply | `data/responses/<provider>_<model>.csv` |
 | `06_score.py` | Scores every reply against the accepted answers and makes an accuracy table per group (95% Wilson confidence intervals) | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
 
@@ -64,7 +64,7 @@ python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pi
 # 2. Pilot: 20 questions sampled with seed 440 (66 prompts), saved as data/responses/<provider>_<model>_pilot.csv
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pilot 20
 
-# 3. Full run (8,428 prompts). It can be stopped and restarted: finished prompts are skipped
+# 3. Full run (8,410 prompts). It can be stopped and restarted: finished prompts are skipped
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME
 ```
 
@@ -103,4 +103,4 @@ It prints the accuracy table and saves the scored replies in `data/scored/` and 
 
 - Check that `data/responses/..._pilot.csv` has a reply in every row and that the `error` column is empty.
 - Look through `data/scored/..._scored.csv`: for each reply marked 0, check that it really is wrong.
-- Spot-check questions against Wikipedia (a random sample of 20 Wikidata questions and all 88 MKQA questions).
+- Spot-check questions against Wikipedia (a random sample of 20 Wikidata questions and the kept MKQA questions). Done on 28 October 2026: see Quality Checks in the main README.

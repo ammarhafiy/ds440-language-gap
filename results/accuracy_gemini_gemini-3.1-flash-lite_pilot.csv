@@ -1,6 +1,6 @@
 ﻿source,league,language,condition,n,correct,accuracy,ci_low,ci_high,refusals
-mkqa,mixed,en,no_facts,7,7,1.0,0.646,1.0,0
-mkqa,mixed,ms,no_facts,7,7,1.0,0.646,1.0,0
+mkqa,mixed,en,no_facts,6,6,1.0,0.61,1.0,0
+mkqa,mixed,ms,no_facts,6,6,1.0,0.61,1.0,0
 wikidata,msl,en,no_facts,7,2,0.286,0.082,0.641,0
 wikidata,msl,en,with_facts,7,7,1.0,0.646,1.0,0
 wikidata,msl,ms,no_facts,7,1,0.143,0.026,0.513,0

@@ -21,7 +21,9 @@ Scoring rules (see notes/scoring_rubric.md):
        For MKQA answers with a unit (e.g. "3 minutes"), the number alone is also accepted.
     3. Incorrect (0) otherwise. Empty replies and refusals are flagged in the 'refusal' column.
     4. The language of each reply (en / ms / unknown) is guessed from common words.
-Rows whose request failed (error column filled) are not scored.
+Rows whose request failed (error column filled) are not scored. Replies to questions that are
+no longer in questions_final.csv (e.g. MKQA questions removed in the re-check after the replies
+were collected) are left out of the scored file and the accuracy table.
 """
 import argparse
 import csv
@@ -209,11 +211,14 @@ def score_file(path, questions):
         print(f"Skipping {path.name}: not a responses file.")
         return
     forms_cache = {}
-    scored, skipped = [], 0
+    scored, skipped, removed = [], 0, set()
     for r in rows:
         q = questions.get(r["question_id"])
         if q is None:
-            sys.exit(f"{path.name}: unknown question_id {r['question_id']}")
+            if not r["question_id"].startswith(("mkqa-", "msl-", "nba-")):
+                sys.exit(f"{path.name}: unknown question_id {r['question_id']}")
+            removed.add(r["question_id"])  # question removed from the final set
+            continue
         out = dict(r)
         out["answer_en"] = q["answer_en"]
         out["answer_ms"] = q["answer_ms"]
@@ -258,6 +263,9 @@ def score_file(path, questions):
     write_csv(results_path, GROUP_COLUMNS + ["n", "correct", "accuracy", "ci_low", "ci_high", "refusals"], table)
 
     print(f"\n{path.name}: {len(scored) - skipped} replies scored, {skipped} failed requests skipped")
+    if removed:
+        n_removed = sum(1 for r in rows if r["question_id"] in removed)
+        print(f"  {n_removed} replies to {len(removed)} questions no longer in the question set were left out")
     print(f"  {'source':9} {'league':6} {'lang':4} {'condition':10} {'correct':>9}  accuracy  95% CI")
     for t in table:
         print(f"  {t['source']:9} {t['league']:6} {t['language']:4} {t['condition']:10} "

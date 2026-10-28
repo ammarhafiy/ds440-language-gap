@@ -1,4 +1,4 @@
-example_id,remove_answer,reason
+﻿example_id,remove_answer,reason
 4972735096175159012,Greg LeMond,Wrong: LeMond came second in 1985; Bernard Hinault won
 4972735096175159012,Gregory James LeMond,Wrong: LeMond came second in 1985; Bernard Hinault won
 -6011520478702185430,West Indies cricket team,Wrong: India won the first ICC T20 World Cup (2007)
@@ -34,3 +34,63 @@ example_id,remove_answer,reason
 3918640500309682159,North America,Too general: continent-level answer
 3918640500309682159,Amerika Utara,Too general: continent-level answer
 3918640500309682159,Bjørgvin,Wrong: alias of Bergen in Norway
+-9106651808061997159,United States of America,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,U.S.A.,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,the USA,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,the United States,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,U. S. A.,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,USA,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,US of A,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,the US,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,United States,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,U. S.,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,U.S.,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,America,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,the United States of America,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,Amerika Syarikat,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+-9106651808061997159,Amerika,Too general: a country-level answer would count a vague reply as correct. US Open tennis is played in New York (Flushing Meadows) (found in my re-check)
+1146131189893841602,United States of America,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,U.S.A.,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,the USA,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,the United States,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,U. S. A.,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,USA,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,US of A,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,the US,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,United States,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,U. S.,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,U.S.,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,America,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,the United States of America,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,Amerika Syarikat,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+1146131189893841602,Amerika,"Too general: a country-level answer would count a vague reply as correct. Wyndham Championship is played in Greensboro, North Carolina (found in my re-check)"
+3918640500309682159,United States of America,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,U.S.A.,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,the USA,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,the United States,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,U. S. A.,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,USA,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,US of A,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,the US,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,United States,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,U. S.,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,U.S.,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,America,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,the United States of America,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,Amerika Syarikat,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+3918640500309682159,Amerika,"Too general: a country-level answer would count a vague reply as correct. The Giants play at MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,United States of America,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,U.S.A.,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,the USA,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,the United States,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,U. S. A.,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,USA,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,US of A,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,the US,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,United States,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,U. S.,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,U.S.,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,America,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,the United States of America,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,Amerika Syarikat,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
+7045918283731371910,Amerika,"Too general: a country-level answer would count a vague reply as correct. The Jets' stadium is MetLife Stadium, East Rutherford, New Jersey (found in my re-check)"
