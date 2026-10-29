@@ -40,13 +40,13 @@ Full wording and references are in Report 2 (Introduction).
 | Source | Malaysia Super League | NBA | Mixed sports | Total |
 |---|---|---|---|---|
 | Wikidata: players (birthplace, birth year) | 977 | 984 | – | 1,961 |
-| Wikidata: clubs (home city, founding year) | 31 | 71 | – | 102 |
+| Wikidata: clubs (home city, founding year) | 26 | 71 | – | 97 |
 | MKQA (79 kept of 681 sports candidates) | – | – | 79 | 79 |
-| **Total** | **1,008** | **1,055** | **79** | **2,142** |
+| **Total** | **1,003** | **1,055** | **79** | **2,137** |
 
-Every question has an English and a Malay version. Prompts per chatbot: Wikidata questions × 2 languages × 2 conditions (8,252) + MKQA questions × 2 languages × no facts only (158) = **8,410**.
+Every question has an English and a Malay version. Prompts per chatbot: Wikidata questions × 2 languages × 2 conditions (8,232) + MKQA questions × 2 languages × no facts only (158) = **8,390**.
 
-The first-pass MKQA review kept 88 questions. My re-check (28 October 2026) removed 9 of them (see Quality Checks), after the chatbot replies had been collected. The chatbots therefore received 8,428 prompts each; the 18 prompts for the removed questions are left out when the replies are scored.
+The chatbots received 8,428 prompts each (2,151 questions). After the replies had been collected, 14 questions were removed: 9 MKQA questions in my re-check of the MKQA review (28 October 2026) and 5 club questions whose answer key was a state or a country instead of a city (29 October 2026; see Quality Checks). The 38 prompts for these questions are left out when the replies are scored.
 
 ## Data Coverage Check (Wikidata, 13 October 2026)
 
@@ -78,11 +78,12 @@ Statistical analysis scripts will be added next. Every column of every data file
 
 20 questions sampled with seed 440 (66 prompts) were sent to Gemini 3.1 Flash-Lite (free tier, temperature 0) to test the pipeline. All 66 replies were collected without errors and scored with `scripts/06_score.py`. A manual check of all 66 replies (first pass done with Claude, then confirmed by me) agreed with every automatic score after two fixes found in the pilot: numbers written as words ("four", "empat") and dates in other formats ("September 6, 2018"). An earlier attempt with Gemini 3.8 Flash stopped after 11 replies because the free tier's daily request limit was reached. The pilot is a test of the pipeline, not a result: the samples are far too small to draw conclusions. One pilot MKQA question was later removed in the re-check, so re-scoring the pilot now gives 64 scored replies.
 
-## Quality Checks (28 October 2026)
+## Quality Checks (28–29 October 2026)
 
 - **Answer keys (Wikidata):** I checked 20 randomly chosen Wikidata questions (10 per league, seed 440) against Wikipedia. 19 matched; 1 could not be checked because Wikipedia does not give the player's birthplace; none were contradicted.
 - **MKQA review re-check:** I re-checked all 88 MKQA questions kept by the first-pass review and a random sample of 30 of the 593 rejected ones. I agreed with 79 of the 88 kept questions; the other 9 were removed (several valid answers, an answer that has changed, or a doubtful answer key). I agreed with 29 of the 30 rejected questions; the one I would have kept was left out because adding it would have needed new chatbot replies. I also removed "United States" / "America" from the accepted answers of 4 location questions, because a vague reply would otherwise count as correct (`data/mkqa_answer_fixes.csv`). The decisions and notes are in `data/questions/mkqa_sports_candidates.csv` (`recheck_*` and `final_keep` columns) and `notes/answer_key_spot_check.xlsx`.
 - **Malay wording:** a second native Malay speaker reviewed all Malay question templates, league terms and the prompt instruction and found no errors.
+- **Answer keys found while reviewing replies (29 October 2026):** replies marked wrong even though the correct fact was in the prompt showed two answer-key problems, which were fixed for all chatbots and conditions before the hand check (see "Changes after finalizing" in `notes/scoring_rubric.md`): 5 Malaysia Super League club questions asked for a city but had a state or country as the answer (e.g. "Malaysia"), so they were removed (`data/question_exclusions.csv`); and 2 MKQA questions were missing the short team names "Duke Blue Devils" and "Notre Dame", which were added (`data/mkqa_answer_additions.csv`).
 
 ## How to Run
 

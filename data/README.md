@@ -30,6 +30,20 @@ All CSV files are UTF-8 (saved with a byte-order mark so Excel shows Malay text 
 | `instruction` | First line of every prompt (asks for a short answer in the language of the question) |
 | `fact_label`, `question_label` | Labels before the fact and the question ("Fact:" / "Fakta:", "Question:" / "Soalan:") |
 
+### `question_exclusions.csv`: questions removed after checking (script 04)
+| Column | Meaning |
+|---|---|
+| `question_id` | Question that is left out of the final question set |
+| `reason` | Why it is removed (e.g. the answer key is a state, not a city) |
+| `date` | When it was removed |
+
+### `mkqa_answer_additions.csv`: correct MKQA answers that MKQA's list is missing
+| Column | Meaning |
+|---|---|
+| `example_id` | MKQA question ID |
+| `add_answer` | Accepted answer that is added (e.g. a short team name) |
+| `reason` | Why it is added |
+
 ### `mkqa_answer_fixes.csv`: MKQA answers removed before scoring
 | Column | Meaning |
 |---|---|
@@ -102,7 +116,7 @@ Rules: 500 players per league sampled with seed 440 (from players with at least 
 | `recheck_note` | Notes from the re-check (what Wikipedia says, why a question was removed) |
 | `final_keep` | Final decision used by script 04: `yes` = used in the study (79 questions) |
 
-### `questions_final.csv`: final question set, 2,142 questions (script 04)
+### `questions_final.csv`: final question set, 2,137 questions (script 04)
 | Column | Meaning |
 |---|---|
 | `question_id` | Wikidata IDs as above; MKQA questions are `mkqa-<example_id>` |
@@ -118,7 +132,7 @@ Rules: 500 players per league sampled with seed 440 (from players with at least 
 
 Cleaning of `accepted_answers` (script 04): only MKQA questions with `final_keep` = `yes` are included; answers listed in `mkqa_answer_fixes.csv` are removed; aliases with no letters or digits (e.g. flag emojis), aliases of one or two characters (except KL, PJ, JB, NY, NJ, SF) and short everyday words (e.g. "can" for Canada) are removed, because scoring is not case-sensitive and they would match ordinary words; numbers are always kept. For MKQA date answers, the year alone is also accepted unless the year already appears in the question.
 
-## `prompts/prompts.csv`: every prompt (script 04), 8,410 rows
+## `prompts/prompts.csv`: every prompt (script 04), 8,390 rows
 | Column | Meaning |
 |---|---|
 | `prompt_id` | `<question_id>-<language>-<condition>` |
@@ -143,7 +157,7 @@ One file per provider and model, e.g. `openai_<model>.csv`; pilot runs end in `_
 | `error` | Error message if the request failed or the reply was empty (these prompts are retried on the next run) |
 
 ## `scored/`: scored replies (script 06)
-One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus the columns below. Replies to questions that are no longer in `questions_final.csv` (the 9 MKQA questions removed in the re-check) are left out.
+One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns of the responses file, plus the columns below. Replies to questions that are no longer in `questions_final.csv` (the 9 MKQA questions removed in the re-check and the 5 club questions in `question_exclusions.csv`) are left out.
 
 | Column | Meaning |
 |---|---|

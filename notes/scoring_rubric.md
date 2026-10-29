@@ -53,7 +53,12 @@ If this review finds a systematic matching problem (for example a common answer 
 
 ## Changes after finalizing
 
-*(none so far)*
+**29 October 2026: answer-key fixes before the hand check.** Found while reviewing the replies scored as incorrect even though the correct fact was in the prompt (Gemini 3.1 Flash-Lite). Both fixes correct the answer keys; they do not depend on how well any chatbot did, and they apply to every chatbot, language and condition. All replies were scored again afterwards.
+
+1. **5 club questions removed** (`data/question_exclusions.csv`): they ask "In which city is the club based?" but the answer key is a country ("Malaysia", 2 questions) or a state ("Perak", "Selangor", "Terengganu", whose club names already contain the answer). The Wikidata location for these clubs is not a city, so the question has no valid answer key.
+2. **Short team names added for 2 MKQA questions** (`data/mkqa_answer_additions.csv`): "Duke Blue Devils" and "Duke" (2015 NCAA men's championship), "Notre Dame Fighting Irish" and "Notre Dame" (2018 NCAA women's championship). MKQA only listed long forms such as "Duke Blue Devils men's basketball", so correct replies naming the team were marked wrong.
+
+Not changed: some replies give the correct place in a third language (e.g. Czech "V Brně" = "in Brno"). The automatic scoring cannot match these changed word forms ("Brně" is not "Brno"), so they stay incorrect there. In the hand check they count as correct (correct answer in the wrong language), and they are reported separately.
 
 ## Pilot (22 October 2026)
 

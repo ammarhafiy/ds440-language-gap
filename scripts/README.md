@@ -64,7 +64,7 @@ python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pi
 # 2. Pilot: 20 questions sampled with seed 440 (66 prompts), saved as data/responses/<provider>_<model>_pilot.csv
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pilot 20
 
-# 3. Full run (8,410 prompts). It can be stopped and restarted: finished prompts are skipped
+# 3. Full run (8,390 prompts). It can be stopped and restarted: finished prompts are skipped
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME
 ```
 

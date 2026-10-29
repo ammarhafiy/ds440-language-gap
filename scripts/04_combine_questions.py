@@ -11,6 +11,8 @@ Reads:
     data/questions/questions_v1.csv            Wikidata questions (from script 02)
     data/questions/mkqa_sports_candidates.csv  MKQA candidates with keep / final_keep = yes / no
     data/mkqa_answer_fixes.csv                 wrong or too-general MKQA answers to remove
+    data/mkqa_answer_additions.csv             correct MKQA answers that MKQA's list is missing
+    data/question_exclusions.csv               questions removed after checking (with reasons)
     data/prompt_templates.csv                  prompt instruction and labels (English + Malay)
 Writes:
     data/questions/questions_final.csv         one row per question (English + Malay)
@@ -32,6 +34,8 @@ DATA = ROOT / "data"
 WIKIDATA_PATH = DATA / "questions" / "questions_v1.csv"
 MKQA_PATH = DATA / "questions" / "mkqa_sports_candidates.csv"
 FIXES_PATH = DATA / "mkqa_answer_fixes.csv"
+ADDITIONS_PATH = DATA / "mkqa_answer_additions.csv"
+EXCLUSIONS_PATH = DATA / "question_exclusions.csv"
 PROMPT_TEMPLATES_PATH = DATA / "prompt_templates.csv"
 QUESTIONS_OUT = DATA / "questions" / "questions_final.csv"
 PROMPTS_OUT = DATA / "prompts" / "prompts.csv"
@@ -135,6 +139,10 @@ def mkqa_rows():
     fixes = {}
     for f in read_csv(FIXES_PATH):
         fixes.setdefault(f["example_id"].strip(), []).append(f["remove_answer"].strip())
+    additions = {}
+    if ADDITIONS_PATH.exists():
+        for a in read_csv(ADDITIONS_PATH):
+            additions.setdefault(a["example_id"].strip(), []).append(a["add_answer"].strip())
 
     candidates = read_csv(MKQA_PATH)
     if "keep" not in candidates[0]:
@@ -149,7 +157,8 @@ def mkqa_rows():
     for c in candidates:
         if c[decision].strip().lower() != "yes":
             continue
-        accepted = split(c["accepted_answers_en"]) + split(c["accepted_answers_ms"])
+        accepted = (split(c["accepted_answers_en"]) + split(c["accepted_answers_ms"])
+                    + additions.get(c["example_id"].strip(), []))
         # For date answers, also accept the year on its own, unless the year is already in the
         # question (e.g. "when does the season start 2018"), where it would give the answer away.
         if c["answer_type"] == "date":
@@ -219,8 +228,20 @@ def prompt_rows(questions):
     return rows
 
 
+def apply_exclusions(questions):
+    """Drop the questions listed in data/question_exclusions.csv (removed after checking)."""
+    if not EXCLUSIONS_PATH.exists():
+        return questions
+    excluded = {e["question_id"].strip() for e in read_csv(EXCLUSIONS_PATH)}
+    unknown = excluded - {q["question_id"] for q in questions}
+    if unknown:
+        sys.exit(f"question_exclusions.csv lists unknown question IDs: {sorted(unknown)}")
+    print(f"Excluded {len(excluded)} questions listed in {EXCLUSIONS_PATH.name}")
+    return [q for q in questions if q["question_id"] not in excluded]
+
+
 def main():
-    wikidata = wikidata_rows()
+    wikidata = apply_exclusions(wikidata_rows())
     mkqa = mkqa_rows()
     questions = wikidata + mkqa
     ids = [q["question_id"] for q in questions]
