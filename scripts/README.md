@@ -10,6 +10,7 @@ Run the scripts in order from the repository folder. Each one prints a short sum
 | `04_combine_questions.py` | Combines the Wikidata questions and the kept MKQA questions (`final_keep` = yes after the re-check), cleans the accepted answers, and writes every prompt | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | `05_collect_responses.py` | Sends the prompts to a chatbot API and saves every reply | `data/responses/<provider>_<model>.csv` |
 | `06_score.py` | Scores every reply against the accepted answers and makes an accuracy table per group (95% Wilson confidence intervals) | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
+| `07_hand_check.py` | `make`: draws the blind hand-check sample (20 replies per group, seed 440) as a spreadsheet without the automatic scores. `kappa`: compares the filled sheet with the automatic scores (agreement, Cohen's kappa, every disagreement) | `data/hand_check/<name>_hand_check.xlsx`, `results/hand_check_<name>.csv`, `results/hand_check_summary_<name>.csv` |
 
 ## Before running
 
@@ -98,6 +99,23 @@ python scripts/06_score.py --files data/responses/gemini_gemini-3.1-flash-lite_p
 ```
 
 It prints the accuracy table and saves the scored replies in `data/scored/` and the table in `results/`. The rules are in `notes/scoring_rubric.md`. No API key is needed.
+
+## Hand check (script 07)
+
+Done once for each chatbot, after scoring. The rules are in `notes/scoring_rubric.md` ("Hand check").
+
+```
+# 1. make the blind sheet: 200 replies (20 from each of the 10 groups, seed 440), without the automatic scores
+python scripts/07_hand_check.py make --scored data/scored/gemini_gemini-3.1-flash-lite_scored.csv
+
+# 2. open data/hand_check/gemini_gemini-3.1-flash-lite_hand_check.xlsx, read the "How to use" sheet,
+#    choose correct / incorrect for every reply yourself (no AI help), and save it in the same place
+
+# 3. compare your scores with the automatic scores
+python scripts/07_hand_check.py kappa --scored data/scored/gemini_gemini-3.1-flash-lite_scored.csv
+```
+
+Step 3 prints the agreement, Cohen's kappa, a confusion table and every disagreement, and saves them in `results/`. If any reply has no score yet, it lists the row numbers and stops. `make` never replaces an existing sheet (it may already have your scores in it) unless you add `--overwrite`.
 
 ## After running
 

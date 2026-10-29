@@ -71,6 +71,7 @@ Queries and full results are in `queries/`. The 15 October download used for the
 | 4. Combine questions and write prompts | `scripts/04_combine_questions.py` | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | 5. Collect chatbot replies | `scripts/05_collect_responses.py` | `data/responses/<provider>_<model>.csv` |
 | 6. Score replies | `scripts/06_score.py` | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
+| 7. Blind hand check of the scores | `scripts/07_hand_check.py` | `data/hand_check/<name>_hand_check.xlsx`, `results/hand_check_<name>.csv`, `results/hand_check_summary_<name>.csv` |
 
 Statistical analysis scripts will be added next. Every column of every data file is described in [`data/README.md`](data/README.md).
 
@@ -97,6 +98,8 @@ python scripts/03_mkqa_sports.py        # find MKQA sports questions (needs data
 python scripts/04_combine_questions.py  # final question set + all prompts
 python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pilot 20
 python scripts/06_score.py              # score all replies + accuracy tables
+python scripts/07_hand_check.py make --scored data/scored/NAME_scored.csv   # blind hand-check sheet
+python scripts/07_hand_check.py kappa --scored data/scored/NAME_scored.csv  # after filling it in: Cohen's kappa
 ```
 
 Step 1 queries the live Wikidata service, so running it again later can give slightly different data. To reproduce this study exactly, skip step 1 and use the saved download in `data/raw/` (15 October 2026).
@@ -115,10 +118,11 @@ data/
   prompts/                # Every prompt sent to the chatbots (script 04)
   responses/              # Chatbot replies, one CSV per provider/model (script 05)
   scored/                 # Replies with automatic scores and flags (script 06)
+  hand_check/             # Blind hand-check sheets, one per chatbot (script 07)
   pilot/                  # 20 hand-written pilot questions from week 1 (no longer used)
-results/                  # Accuracy tables with 95% confidence intervals (script 06)
+results/                  # Accuracy tables with 95% confidence intervals (script 06), hand-check agreement (script 07)
 queries/                  # Wikidata SPARQL queries used for the coverage check
-scripts/                  # Pipeline scripts 01-06
+scripts/                  # Pipeline scripts 01-07
 notes/
   scoring_rubric.md       # Scoring rules
   answer_key_spot_check.xlsx  # My answer-key spot-check and MKQA re-check (28 Oct 2026)
@@ -140,5 +144,5 @@ notes/
 
 ## Generative AI Disclosure
 
-The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–06) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the first 35 answer fixes in `data/mkqa_answer_fixes.csv`. I re-checked all 88 kept questions and a random sample of 30 rejected ones myself (`recheck_*` and `final_keep` columns; 9 questions removed, and country-level answers removed for 4 more questions). Claude made the spot-check spreadsheet and applied my re-check decisions to the data files. The research question and hypotheses are my own (Reports 1 and 2).
+The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–07) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Script 07 draws the blind hand-check sample and computes Cohen's kappa, and Claude ran it to make the Gemini hand-check sheet; the hand scores themselves are my own, made without AI help and without seeing the automatic scores. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the first 35 answer fixes in `data/mkqa_answer_fixes.csv`. I re-checked all 88 kept questions and a random sample of 30 rejected ones myself (`recheck_*` and `final_keep` columns; 9 questions removed, and country-level answers removed for 4 more questions). Claude made the spot-check spreadsheet and applied my re-check decisions to the data files. The research question and hypotheses are my own (Reports 1 and 2).
 <!-- Update this section whenever AI is used for code or other parts of the project. -->

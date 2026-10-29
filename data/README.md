@@ -168,7 +168,25 @@ One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns
 | `reply_language` | `en`, `ms`, or `unknown` (guessed from common words; a reply with only a name or a year is `unknown`) |
 | `language_match` | `1` if the reply is in the language of the question, `0` if not, empty if unknown |
 
-## `../results/`: accuracy tables (script 06)
+## `hand_check/`: blind hand-check sheets (script 07)
+`<name>_hand_check.xlsx`, one per chatbot: 200 replies (20 from each of the 10 groups, random seed 440) for checking the automatic scores by hand. The "How to use" sheet has the instructions and the hand-scoring rules from `notes/scoring_rubric.md`. The "Hand check" sheet has one row per reply:
+
+| Column | Meaning |
+|---|---|
+| `#` | Row number (the sample is shuffled, so the groups are mixed) |
+| `Group` | League, language, and whether the fact was given in the prompt |
+| `Question (as asked)` | The question in the language it was asked |
+| `Fact given in the prompt` | The fact added to the prompt, or "(none)" |
+| `Answer key (English)`, `Answer key (Malay)` | Main correct answer from `questions_final.csv` |
+| `All accepted answers` | Every accepted answer, separated by " \| " |
+| `Chatbot reply` | The reply exactly as received |
+| `Your score (correct / incorrect)` | My hand score (filled in by me, without AI help) |
+| `Notes` | My notes, e.g. hedged answer, spelling variant, answer key may be wrong |
+| `Prompt ID (do not edit)` | Links the row to the scored file |
+
+The automatic score is deliberately not in this file.
+
+## `../results/`: accuracy tables (script 06) and hand-check agreement (script 07)
 `results/accuracy_<name>.csv`, one row per group:
 
 | Column | Meaning |
@@ -178,3 +196,22 @@ One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns
 | `accuracy` | `correct / n` |
 | `ci_low`, `ci_high` | 95% Wilson confidence interval for the accuracy |
 | `refusals` | Number of refusals in the group |
+
+`results/hand_check_<name>.csv`, one row per hand-checked reply: `check` (row number on the sheet), `prompt_id`, `question_id`, the group columns, `answer_en`, `answer_ms`, `response`, `matched_answer`, `refusal`, `reply_language` (copied from the scored file), and:
+
+| Column | Meaning |
+|---|---|
+| `auto_score` | Score from `scripts/06_score.py` |
+| `hand_score` | My score from the hand-check sheet (`1` = correct, `0` = incorrect) |
+| `agree` | `1` if the two scores are the same |
+| `notes` | My notes from the sheet |
+
+`results/hand_check_summary_<name>.csv`, one row for all hand-checked replies (`group` = all) and one per group:
+
+| Column | Meaning |
+|---|---|
+| `group`, `source`, `league`, `language`, `condition` | The group |
+| `n`, `agree`, `agreement` | Replies checked, replies where the two scores agree, and `agree / n` |
+| `kappa` | Cohen's kappa between the hand and automatic scores (all replies only; not given per group, where 20 replies are too few) |
+| `auto_correct`, `hand_correct` | Replies scored correct by the script and by me |
+| `auto_1_hand_0`, `auto_0_hand_1` | Disagreements in each direction |
