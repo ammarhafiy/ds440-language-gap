@@ -1,0 +1,12 @@
+﻿group,source,league,language,condition,n,agree,agreement,kappa,auto_correct,hand_correct,auto_1_hand_0,auto_0_hand_1
+all,all,all,all,all,200,200,1.0,1.0,174,174,0,0
+MKQA · English,mkqa,mixed,en,no_facts,20,20,1.0,,20,20,0,0
+MKQA · Malay,mkqa,mixed,ms,no_facts,20,20,1.0,,20,20,0,0
+Malaysia Super League · English · no fact,wikidata,msl,en,no_facts,20,20,1.0,,10,10,0,0
+Malaysia Super League · English · fact given,wikidata,msl,en,with_facts,20,20,1.0,,20,20,0,0
+Malaysia Super League · Malay · no fact,wikidata,msl,ms,no_facts,20,20,1.0,,9,9,0,0
+Malaysia Super League · Malay · fact given,wikidata,msl,ms,with_facts,20,20,1.0,,20,20,0,0
+NBA · English · no fact,wikidata,nba,en,no_facts,20,20,1.0,,17,17,0,0
+NBA · English · fact given,wikidata,nba,en,with_facts,20,20,1.0,,20,20,0,0
+NBA · Malay · no fact,wikidata,nba,ms,no_facts,20,20,1.0,,18,18,0,0
+NBA · Malay · fact given,wikidata,nba,ms,with_facts,20,20,1.0,,20,20,0,0
