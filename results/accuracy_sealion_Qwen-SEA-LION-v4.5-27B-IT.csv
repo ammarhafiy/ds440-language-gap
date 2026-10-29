@@ -1,0 +1,11 @@
+﻿source,league,language,condition,n,correct,accuracy,ci_low,ci_high,refusals
+mkqa,mixed,en,no_facts,79,62,0.785,0.682,0.861,0
+mkqa,mixed,ms,no_facts,79,57,0.722,0.614,0.808,0
+wikidata,msl,en,no_facts,1003,128,0.128,0.108,0.15,0
+wikidata,msl,en,with_facts,1003,1002,0.999,0.994,1.0,0
+wikidata,msl,ms,no_facts,1003,120,0.12,0.101,0.141,0
+wikidata,msl,ms,with_facts,1003,1003,1.0,0.996,1.0,0
+wikidata,nba,en,no_facts,1055,265,0.251,0.226,0.278,0
+wikidata,nba,en,with_facts,1055,1055,1.0,0.996,1.0,0
+wikidata,nba,ms,no_facts,1055,255,0.242,0.217,0.268,0
+wikidata,nba,ms,with_facts,1055,1055,1.0,0.996,1.0,0

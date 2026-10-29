@@ -110,8 +110,12 @@ def wikidata_rows():
     rows = []
     for q in read_csv(WIKIDATA_PATH):
         accepted = clean_answers(split(q["accepted_answers"]))
-        if not accepted:
-            accepted = [q["answer_en"]]
+        # The main answer is always accepted, even when it is a short everyday word: the
+        # COMMON_WORDS rule is only meant for aliases. Without this, "Bar" (Montenegro) was
+        # dropped and correct replies were scored wrong (fixed 29 October 2026).
+        for main in reversed([q["answer_en"], q["answer_ms"]]):
+            if main.strip() and main.lower() not in {a.lower() for a in accepted}:
+                accepted.insert(0, main.strip())
         rows.append({
             "question_id": q["question_id"],
             "source": "wikidata",

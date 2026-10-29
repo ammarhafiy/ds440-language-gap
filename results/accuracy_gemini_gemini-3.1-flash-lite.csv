@@ -5,7 +5,7 @@ wikidata,msl,en,no_facts,1003,479,0.478,0.447,0.509,0
 wikidata,msl,en,with_facts,1003,998,0.995,0.988,0.998,0
 wikidata,msl,ms,no_facts,1003,479,0.478,0.447,0.509,0
 wikidata,msl,ms,with_facts,1003,1003,1.0,0.996,1.0,0
-wikidata,nba,en,no_facts,1055,888,0.842,0.818,0.862,0
+wikidata,nba,en,no_facts,1055,889,0.843,0.819,0.863,0
 wikidata,nba,en,with_facts,1055,1053,0.998,0.993,0.999,0
-wikidata,nba,ms,no_facts,1055,884,0.838,0.814,0.859,0
-wikidata,nba,ms,with_facts,1055,1054,0.999,0.995,1.0,0
+wikidata,nba,ms,no_facts,1055,885,0.839,0.815,0.86,0
+wikidata,nba,ms,with_facts,1055,1055,1.0,0.996,1.0,0

@@ -18,7 +18,7 @@ These rules come from the Methods section of my Project Proposal (Section 7.3), 
 4. **Refusals** (empty reply, "I don't know", "tidak pasti", ...) are scored as incorrect and also flagged separately.
 5. **Reply language** (English / Malay / unknown) is guessed from common words and recorded for every reply. A reply with only a name or a year is "unknown".
 6. Failed requests (API errors) are not scored; they are sent again.
-7. Replies to questions that are no longer in the final question set (the 9 MKQA questions removed in the re-check on 28 October 2026) are not scored.
+7. Replies to questions that are no longer in the final question set (the 9 MKQA questions removed in the re-check on 28 October 2026 and the 5 club questions removed on 29 October 2026) are not scored.
 
 The automatic score is the score used in the main analysis.
 
@@ -59,6 +59,10 @@ If this review finds a systematic matching problem (for example a common answer 
 2. **Short team names added for 2 MKQA questions** (`data/mkqa_answer_additions.csv`): "Duke Blue Devils" and "Duke" (2015 NCAA men's championship), "Notre Dame Fighting Irish" and "Notre Dame" (2018 NCAA women's championship). MKQA only listed long forms such as "Duke Blue Devils men's basketball", so correct replies naming the team were marked wrong.
 
 Not changed: some replies give the correct place in a third language (e.g. Czech "V Brně" = "in Brno"). The automatic scoring cannot match these changed word forms ("Brně" is not "Brno"), so they stay incorrect there. In the hand check they count as correct (correct answer in the wrong language), and they are reported separately.
+
+**29 October 2026: main answer "Bar" restored.** Found while reviewing SEA-LION's replies that were scored as incorrect even though the correct fact was in the prompt. For one NBA question ("Where was the basketball player Sasha Pavlović born?", answer "Bar", a town in Montenegro), the rule in `scripts/04_combine_questions.py` that removes aliases which are also everyday words ("can", "bar", "may", ...) had also removed the main answer, so "Bar" was not an accepted answer and correct replies were scored wrong. The script now always keeps the main answer (`answer_en` and `answer_ms`); this changes only this one question. All replies were scored again: 3 Gemini replies and 2 SEA-LION replies changed from incorrect to correct. The question is not in the hand-check sample, and no hand scores had been compared with the automatic scores when the fix was made.
+
+Not changed: one SEA-LION reply says only that there is "no record of a footballer" with that name. It is scored incorrect, as it should be, but the refusal flag does not recognize this wording, so it is not counted as a refusal. This is reported rather than fixed.
 
 ## Pilot (22 October 2026)
 
