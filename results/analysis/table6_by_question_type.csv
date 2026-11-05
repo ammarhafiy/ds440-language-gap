@@ -1,0 +1,19 @@
+﻿chatbot,set,question_type,accuracy_pct English,accuracy_pct Malay,n English,n Malay
+Gemini 3.1 Flash-Lite,MKQA,MKQA (mixed),100.0,100.0,79.0,79.0
+Gemini 3.1 Flash-Lite,MSL,birth_year,56.8,58.2,491.0,491.0
+Gemini 3.1 Flash-Lite,MSL,birthplace,38.1,36.4,486.0,486.0
+Gemini 3.1 Flash-Lite,MSL,founded_year,52.9,58.8,17.0,17.0
+Gemini 3.1 Flash-Lite,MSL,home_city,66.7,66.7,9.0,9.0
+Gemini 3.1 Flash-Lite,NBA,birth_year,94.6,93.8,499.0,499.0
+Gemini 3.1 Flash-Lite,NBA,birthplace,72.6,72.2,485.0,485.0
+Gemini 3.1 Flash-Lite,NBA,founded_year,88.2,88.2,34.0,34.0
+Gemini 3.1 Flash-Lite,NBA,home_city,94.6,100.0,37.0,37.0
+SEA-LION v4.5,MKQA,MKQA (mixed),78.5,72.2,79.0,79.0
+SEA-LION v4.5,MSL,birth_year,5.7,6.9,491.0,491.0
+SEA-LION v4.5,MSL,birthplace,18.7,16.0,486.0,486.0
+SEA-LION v4.5,MSL,founded_year,11.8,5.9,17.0,17.0
+SEA-LION v4.5,MSL,home_city,77.8,77.8,9.0,9.0
+SEA-LION v4.5,NBA,birth_year,31.7,30.9,499.0,499.0
+SEA-LION v4.5,NBA,birthplace,8.9,7.2,485.0,485.0
+SEA-LION v4.5,NBA,founded_year,82.4,85.3,34.0,34.0
+SEA-LION v4.5,NBA,home_city,97.3,100.0,37.0,37.0

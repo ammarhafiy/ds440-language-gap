@@ -72,8 +72,20 @@ Queries and full results are in `queries/`. The 15 October download used for the
 | 5. Collect chatbot replies | `scripts/05_collect_responses.py` | `data/responses/<provider>_<model>.csv` |
 | 6. Score replies | `scripts/06_score.py` | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
 | 7. Blind hand check of the scores | `scripts/07_hand_check.py` | `data/hand_check/<name>_hand_check.xlsx`, `results/hand_check_<name>.csv`, `results/hand_check_summary_<name>.csv` |
+| 8. Statistical analysis and figures | `scripts/08_analysis.py` | `results/analysis/` (tables 1–8), `results/analysis/figures/` |
 
-Statistical analysis scripts will be added next. Every column of every data file is described in [`data/README.md`](data/README.md).
+Every column of every data file is described in [`data/README.md`](data/README.md).
+
+**Demo:** [open the analysis notebook in Google Colab](https://colab.research.google.com/github/ammarhafiy/ds440-language-gap/blob/main/notebooks/DS440_analysis_demo.ipynb) (Runtime → Run all, about one minute, no API key needed). It re-scores the saved replies, checks them against the hand check, runs the analysis, shows the figures, and lets you try the scoring on your own reply.
+
+## Analysis (script 08)
+
+- **Accuracy:** share of replies scored correct per chatbot and group, with 95% Wilson confidence intervals.
+- **H1 (English vs Malay, no fact):** every question is asked in both languages, so the answers are paired; McNemar's exact test on the discordant pairs, with a 95% confidence interval for the paired difference. Main test: all no-fact questions; also NBA, Malaysia Super League and MKQA separately.
+- **H2 (wider gap for the Malaysia Super League):** difference between the English–Malay gaps of the two leagues (per-question differences, normal-approximation CI and z-test), and a logistic regression `correct ~ malay * msl` with standard errors clustered by question (the interaction term).
+- **H3 (the fact shrinks the gap):** per-question change in the English–Malay difference from no fact to with fact, paired t-test. A logistic interaction model is not used because several with-fact groups are 100% correct.
+- **H4 (Malay Wikipedia page):** Malaysia Super League player questions without the fact; logistic regression `correct ~ has Malay Wikipedia page + log(1 + site links) + question type`, standard errors clustered by player; for Malay (the test) and English (comparison). NBA players are left out because only 3 of 500 have a Malay Wikipedia page.
+- **Sensitivity checks:** (a) leaving out the 140 birthplace questions whose answer key is a state or a country (`data/coarse_answer_keys.csv`: 137 Malaysia Super League, 3 NBA); (b) counting replies that say "New York" or a New York City borough as correct for New York City answers.
 
 ## Pilot (22 October 2026)
 
@@ -110,6 +122,7 @@ python scripts/05_collect_responses.py --provider openai --model MODEL_NAME --pi
 python scripts/06_score.py              # score all replies + accuracy tables
 python scripts/07_hand_check.py make --scored data/scored/NAME_scored.csv   # blind hand-check sheet
 python scripts/07_hand_check.py kappa --scored data/scored/NAME_scored.csv  # after filling it in: Cohen's kappa
+python scripts/08_analysis.py           # tables and figures for Report 4
 ```
 
 Step 1 queries the live Wikidata service, so running it again later can give slightly different data. To reproduce this study exactly, skip step 1 and use the saved download in `data/raw/` (15 October 2026).
@@ -131,8 +144,10 @@ data/
   hand_check/             # Blind hand-check sheets, one per chatbot (script 07)
   pilot/                  # 20 hand-written pilot questions from week 1 (no longer used)
 results/                  # Accuracy tables with 95% confidence intervals (script 06), hand-check agreement (script 07)
+  analysis/               # Statistical analysis tables and figures (script 08)
+notebooks/                # Colab notebooks: the two data-collection runs and the analysis demo
 queries/                  # Wikidata SPARQL queries used for the coverage check
-scripts/                  # Pipeline scripts 01-07
+scripts/                  # Pipeline scripts 01-08
 notes/
   scoring_rubric.md       # Scoring rules
   answer_key_spot_check.xlsx  # My answer-key spot-check and MKQA re-check (28 Oct 2026)
@@ -154,5 +169,5 @@ notes/
 
 ## Generative AI Disclosure
 
-The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–07) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Script 07 draws the blind hand-check sample and computes Cohen's kappa, and Claude ran it to make the Gemini and SEA-LION hand-check sheets; the hand scores themselves are my own, made without AI help and without seeing the automatic scores. Claude reviewed the risky replies of both chatbots (refusals, replies with more than one answer, and replies scored wrong although the fact was in the prompt) and proposed the answer-key fixes listed in `notes/scoring_rubric.md`; I decided which fixes to apply. After the last fix (29 October 2026), Claude re-ran scripts 04 and 06 to update the question set and the scores. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the first 35 answer fixes in `data/mkqa_answer_fixes.csv`. I re-checked all 88 kept questions and a random sample of 30 rejected ones myself (`recheck_*` and `final_keep` columns; 9 questions removed, and country-level answers removed for 4 more questions). Claude made the spot-check spreadsheet and applied my re-check decisions to the data files. The research question and hypotheses are my own (Reports 1 and 2).
+The initial folder structure, file templates, this README, the data dictionary (`data/README.md`), and the English question templates in `data/pilot/questions.csv` were created with Claude (Anthropic). The Wikidata queries in `queries/` were written with Claude; I ran them myself on the Wikidata Query Service and checked the results. The scripts in `scripts/` (01–08) and `requirements.txt` were written with Claude; I ran the scripts myself and checked their output. Claude also made the analysis demo notebook (`notebooks/DS440_analysis_demo.ipynb`) and the list of broader answer keys used in the sensitivity check (`data/coarse_answer_keys.csv`, from country and state names). Script 07 draws the blind hand-check sample and computes Cohen's kappa, and Claude ran it to make the Gemini and SEA-LION hand-check sheets; the hand scores themselves are my own, made without AI help and without seeing the automatic scores. Claude reviewed the risky replies of both chatbots (refusals, replies with more than one answer, and replies scored wrong although the fact was in the prompt) and proposed the answer-key fixes listed in `notes/scoring_rubric.md`; I decided which fixes to apply. After the last fix (29 October 2026), Claude re-ran scripts 04 and 06 to update the question set and the scores. Claude drafted the English question templates (`data/templates.csv`, `data/league_terms.csv`) and the English prompt instruction (`data/prompt_templates.csv`), which I reviewed. The Malay templates, Malay league terms and Malay prompt instruction are my own translations. Claude did the first-pass review of the 681 MKQA sports candidates (`keep` and `review_reason` columns) using written rules (stable fact, one clear answer, correct answer key), and proposed the first 35 answer fixes in `data/mkqa_answer_fixes.csv`. I re-checked all 88 kept questions and a random sample of 30 rejected ones myself (`recheck_*` and `final_keep` columns; 9 questions removed, and country-level answers removed for 4 more questions). Claude made the spot-check spreadsheet and applied my re-check decisions to the data files. The research question and hypotheses are my own (Reports 1 and 2).
 <!-- Update this section whenever AI is used for code or other parts of the project. -->

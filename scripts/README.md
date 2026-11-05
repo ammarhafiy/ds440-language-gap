@@ -10,6 +10,7 @@ Run the scripts in order from the repository folder. Each one prints a short sum
 | `04_combine_questions.py` | Combines the Wikidata questions and the kept MKQA questions (`final_keep` = yes after the re-check), cleans the accepted answers, and writes every prompt | `data/questions/questions_final.csv`, `data/prompts/prompts.csv` |
 | `05_collect_responses.py` | Sends the prompts to a chatbot API and saves every reply | `data/responses/<provider>_<model>.csv` |
 | `06_score.py` | Scores every reply against the accepted answers and makes an accuracy table per group (95% Wilson confidence intervals) | `data/scored/<name>_scored.csv`, `results/accuracy_<name>.csv` |
+| `08_analysis.py` | Descriptive and inferential analysis for Report 4: accuracy with 95% CIs, McNemar's test (H1), English–Malay gap by league with a logistic regression (H2), gap with and without the fact (H3), Malay Wikipedia regression (H4), sensitivity checks, and 3 figures | `results/analysis/` |
 | `07_hand_check.py` | `make`: draws the blind hand-check sample (20 replies per group, seed 440) as a spreadsheet without the automatic scores. `kappa`: compares the filled sheet with the automatic scores (agreement, Cohen's kappa, every disagreement) | `data/hand_check/<name>_hand_check.xlsx`, `results/hand_check_<name>.csv`, `results/hand_check_summary_<name>.csv` |
 
 ## Before running
@@ -116,6 +117,14 @@ python scripts/07_hand_check.py kappa --scored data/scored/gemini_gemini-3.1-fla
 ```
 
 Step 3 prints the agreement, Cohen's kappa, a confusion table and every disagreement, and saves them in `results/`. If any reply has no score yet, it lists the row numbers and stops. `make` never replaces an existing sheet (it may already have your scores in it) unless you add `--overwrite`.
+
+## Analysis (script 08)
+
+```
+python scripts/08_analysis.py
+```
+
+It uses every scored file in `data/scored/` (pilot files are skipped), prints the main tables, and saves tables 1–8 and three figures in `results/analysis/`. The methods are described at the top of the script and in the main README. No API key is needed. To run everything from the saved data in Colab, use `notebooks/DS440_analysis_demo.ipynb`.
 
 ## After running
 

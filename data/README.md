@@ -186,6 +186,33 @@ One file per responses file, e.g. `gemini_<model>_pilot_scored.csv`: all columns
 
 The automatic score is deliberately not in this file.
 
+## `coarse_answer_keys.csv`: broader birthplace answer keys (sensitivity check, script 08)
+Birthplace questions whose answer key is a state or a country instead of a town or city (e.g. "Selangor", "Malaysia"), found from lists of country and state names. Singapore (a city-state) is not included. 140 questions: 137 Malaysia Super League, 3 NBA.
+
+| Column | Meaning |
+|---|---|
+| `question_id` | Question in `questions_final.csv` |
+| `league` | `msl` or `nba` |
+| `answer_en` | The answer key |
+| `level` | `state` or `country` |
+
+## `../results/analysis/`: statistical analysis (script 08)
+
+| File | Contents |
+|---|---|
+| `table1_accuracy.csv` | Accuracy per chatbot, question set, language and condition, with 95% Wilson CIs |
+| `table2_h1_mcnemar.csv` | H1: English vs Malay on the same questions (no fact): accuracies, difference with 95% CI, discordant pairs, McNemar's exact p (two-sided and one-sided "English better") |
+| `table3_h2_league_gap.csv` | H2: English–Malay gap per league and the difference MSL − NBA (percentage points, 95% CI, p) |
+| `table3b_h2_logit.csv` | H2: logistic regression `correct ~ malay * msl` (odds ratios, 95% CI, p; clustered by question) |
+| `table4_h3_fact_gap.csv` | H3: English–Malay gap without and with the fact, and how much it shrinks (paired t-test) |
+| `table5_h4_malay_wikipedia.csv` | H4: accuracy with and without a Malay Wikipedia page, and the logistic regression odds ratios (clustered by player) |
+| `table6_by_question_type.csv` | Accuracy by question type (birthplace, birth year, home city, founding year, MKQA), no fact |
+| `table7_reply_language.csv` | Share of replies in the language of the question (where the reply language could be detected) |
+| `table8_sensitivity.csv` | Main results next to the two sensitivity checks |
+| `figures/fig1_accuracy_no_fact.png` | Accuracy without the fact, English vs Malay, by question set |
+| `figures/fig2_fact_effect.png` | Accuracy without and with the fact |
+| `figures/fig3_malay_wikipedia.png` | Accuracy for Malaysia Super League players with and without a Malay Wikipedia page |
+
 ## `../results/`: accuracy tables (script 06) and hand-check agreement (script 07)
 `results/accuracy_<name>.csv`, one row per group:
 
