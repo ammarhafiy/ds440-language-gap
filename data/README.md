@@ -208,7 +208,7 @@ Birthplace questions whose answer key is a state or a country instead of a town 
 | `table5_h4_malay_wikipedia.csv` | H4: accuracy with and without a Malay Wikipedia page, and the logistic regression odds ratios (clustered by player) |
 | `table6_by_question_type.csv` | Accuracy by question type (birthplace, birth year, home city, founding year, MKQA), no fact |
 | `table7_reply_language.csv` | Share of replies in the language of the question (where the reply language could be detected) |
-| `table8_sensitivity.csv` | Main results next to the two sensitivity checks |
+| `table8_sensitivity.csv` | Main results next to the two sensitivity checks: accuracy, H1 (overall with 95% CI, and by league), H2 gap difference, and the replies changed by the New York check |
 | `figures/fig1_accuracy_no_fact.png` | Accuracy without the fact, English vs Malay, by question set |
 | `figures/fig2_fact_effect.png` | Accuracy without and with the fact |
 | `figures/fig3_malay_wikipedia.png` | Accuracy for Malaysia Super League players with and without a Malay Wikipedia page |

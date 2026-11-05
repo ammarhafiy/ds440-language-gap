@@ -311,63 +311,86 @@ def reply_language_table(df):
 NYC_WORDS = ["new york", "brooklyn", "bronx", "queens", "manhattan", "staten island"]
 
 
+def h1_text(r, with_ci=False):
+    t = f"{r['diff_pct_points']}"
+    if with_ci:
+        t += f" [{r['diff_ci_low']}, {r['diff_ci_high']}]"
+    return f"{t} (p = {r['mcnemar_p_two_sided']})"
+
+
+def h1_rows(check, h1_main, h1_sens, subsets):
+    """H1 rows for a sensitivity check: 'All (no fact)' is the overall H1 test (shown with its 95% CI)."""
+    rows = []
+    for _, r in h1_main[h1_main["questions"].isin(subsets)].iterrows():
+        s = h1_sens[(h1_sens["chatbot"] == r["chatbot"]) & (h1_sens["questions"] == r["questions"])].iloc[0]
+        overall = r["questions"] == "All (no fact)"
+        name = "overall" if overall else r["questions"]
+        rows.append({"check": check, "chatbot": r["chatbot"],
+                     "measure": f"H1 {name}: English - Malay (points){' [95% CI]' if overall else ''}, McNemar p",
+                     "main": h1_text(r, overall), "sensitivity": h1_text(s, overall),
+                     "n_main": r["n_pairs"], "n_sensitivity": s["n_pairs"]})
+    return rows
+
+
+def h2_rows(check, h2_main, h2_sens):
+    """H2 rows for a sensitivity check; n = NBA + MSL Wikidata questions."""
+    rows = []
+    for _, r in h2_main.iterrows():
+        s = h2_sens[h2_sens["chatbot"] == r["chatbot"]].iloc[0]
+        rows.append({"check": check, "chatbot": r["chatbot"],
+                     "measure": "H2 gap difference MSL - NBA (points), z-test p",
+                     "main": f"{r['gap_difference_msl_minus_nba']} (p = {r['p_two_sided']})",
+                     "sensitivity": f"{s['gap_difference_msl_minus_nba']} (p = {s['p_two_sided']})",
+                     "n_main": int(r["n_nba"] + r["n_msl"]), "n_sensitivity": int(s["n_nba"] + s["n_msl"])})
+    return rows
+
+
 def sensitivity_table(df):
     rows = []
+    h1_main = h1_table(df)
+    h2_main, _ = h2_tables(df, label="sensitivity")   # same numbers as table 3; skips refitting the logit
+
     # (a) leave out birthplace questions whose answer key is a state or a country
+    check = "broader answer keys removed"
     keep = df[~df["coarse_key"]]
     for bot in df["chatbot"].unique():
         for s in ["NBA", "MSL"]:
             for lang in ["en", "ms"]:
                 a = df[(df["chatbot"] == bot) & (df["set"] == s) & (df["language"] == lang) & (df["condition"] == "no_facts")]
                 b = keep[(keep["chatbot"] == bot) & (keep["set"] == s) & (keep["language"] == lang) & (keep["condition"] == "no_facts")]
-                rows.append({"check": "broader answer keys removed", "chatbot": bot,
+                rows.append({"check": check, "chatbot": bot,
                              "measure": f"{s} accuracy, {LANGS[lang]}, no fact",
                              "main": pct(a["correct"].mean()), "sensitivity": pct(b["correct"].mean()),
                              "n_main": len(a), "n_sensitivity": len(b)})
-    h1_main, h1_sens = h1_table(df), h1_table(keep)
-    for _, r in h1_main.iterrows():
-        if r["questions"] in ("NBA", "MSL"):
-            s = h1_sens[(h1_sens["chatbot"] == r["chatbot"]) & (h1_sens["questions"] == r["questions"])].iloc[0]
-            rows.append({"check": "broader answer keys removed", "chatbot": r["chatbot"],
-                         "measure": f"H1 {r['questions']}: English - Malay (points), McNemar p",
-                         "main": f"{r['diff_pct_points']} (p = {r['mcnemar_p_two_sided']})",
-                         "sensitivity": f"{s['diff_pct_points']} (p = {s['mcnemar_p_two_sided']})",
-                         "n_main": r["n_pairs"], "n_sensitivity": s["n_pairs"]})
-    h2_main, _ = h2_tables(df)
-    h2_sens, _ = h2_tables(keep, label="sensitivity")
-    for _, r in h2_main.iterrows():
-        s = h2_sens[h2_sens["chatbot"] == r["chatbot"]].iloc[0]
-        rows.append({"check": "broader answer keys removed", "chatbot": r["chatbot"],
-                     "measure": "H2 gap difference MSL - NBA (points), p",
-                     "main": f"{r['gap_difference_msl_minus_nba']} (p = {r['p_two_sided']})",
-                     "sensitivity": f"{s['gap_difference_msl_minus_nba']} (p = {s['p_two_sided']})",
-                     "n_main": r["n_msl"], "n_sensitivity": s["n_msl"]})
+    rows += h1_rows(check, h1_main, h1_table(keep), ["All (no fact)", "NBA", "MSL"])
+    rows += h2_rows(check, h2_main, h2_tables(keep, label="sensitivity")[0])
+
     # (b) count "New York" and borough replies as correct for New York City answers
+    check = "\"New York\" replies counted correct"
     ny = df.copy()
     is_nyc = ny["answer_en"].eq("New York City")
     mentions = ny["response"].str.lower().apply(lambda t: any(w in t for w in NYC_WORDS))
     changed = is_nyc & mentions & ny["correct"].eq(0)
     ny.loc[changed, "correct"] = 1
     for bot in df["chatbot"].unique():
-        rows.append({"check": "\"New York\" replies counted correct", "chatbot": bot,
+        mine = changed & (ny["chatbot"] == bot)
+        rows.append({"check": check, "chatbot": bot,
                      "measure": "replies changed from incorrect to correct",
-                     "main": 0, "sensitivity": int((changed & (ny["chatbot"] == bot)).sum()),
-                     "n_main": "", "n_sensitivity": ""})
+                     "main": 0, "sensitivity": int(mine.sum()), "n_main": "", "n_sensitivity": ""})
+        for lang in ["en", "ms"]:
+            rows.append({"check": check, "chatbot": bot,
+                         "measure": f"replies changed from incorrect to correct, {LANGS[lang]} questions",
+                         "main": 0, "sensitivity": int((mine & (ny["language"] == lang)).sum()),
+                         "n_main": "", "n_sensitivity": ""})
         for lang in ["en", "ms"]:
             a = df[(df["chatbot"] == bot) & (df["set"] == "NBA") & (df["language"] == lang) & (df["condition"] == "no_facts")]
             b = ny[(ny["chatbot"] == bot) & (ny["set"] == "NBA") & (ny["language"] == lang) & (ny["condition"] == "no_facts")]
-            rows.append({"check": "\"New York\" replies counted correct", "chatbot": bot,
+            rows.append({"check": check, "chatbot": bot,
                          "measure": f"NBA accuracy, {LANGS[lang]}, no fact",
                          "main": pct(a["correct"].mean()), "sensitivity": pct(b["correct"].mean()),
                          "n_main": len(a), "n_sensitivity": len(b)})
-    h1_ny = h1_table(ny)
-    for _, r in h1_main[h1_main["questions"] == "NBA"].iterrows():
-        s = h1_ny[(h1_ny["chatbot"] == r["chatbot"]) & (h1_ny["questions"] == "NBA")].iloc[0]
-        rows.append({"check": "\"New York\" replies counted correct", "chatbot": r["chatbot"],
-                     "measure": "H1 NBA: English - Malay (points), McNemar p",
-                     "main": f"{r['diff_pct_points']} (p = {r['mcnemar_p_two_sided']})",
-                     "sensitivity": f"{s['diff_pct_points']} (p = {s['mcnemar_p_two_sided']})",
-                     "n_main": r["n_pairs"], "n_sensitivity": s["n_pairs"]})
+    rows += h1_rows(check, h1_main, h1_table(ny), ["All (no fact)", "NBA"])
+    rows += h2_rows(check, h2_main, h2_tables(ny, label="sensitivity")[0])
     return pd.DataFrame(rows)
 
 
