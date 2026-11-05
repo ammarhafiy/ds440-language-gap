@@ -8,16 +8,16 @@ Reads:
     data/scored/<name>_scored.csv      scored replies from script 06 (pilot files are skipped)
     data/questions/questions_final.csv question details (league, property, Malay Wikipedia page, site links)
     data/coarse_answer_keys.csv        birthplace answer keys that are a state or a country (sensitivity check)
-Writes (results/analysis/):
-    table1_accuracy.csv           accuracy per chatbot and group, 95% Wilson confidence intervals
-    table2_h1_mcnemar.csv         H1: English vs Malay on the same questions, no fact (McNemar's exact test)
-    table3_h2_league_gap.csv      H2: is the English-Malay gap wider for Malaysia Super League than for NBA?
-    table3b_h2_logit.csv          H2: logistic regression correct ~ Malay * MSL (no fact, Wikidata)
-    table4_h3_fact_gap.csv        H3: does adding the fact shrink the English-Malay gap?
-    table5_h4_malay_wikipedia.csv H4: Malay Wikipedia page and accuracy (MSL players, no fact)
-    table6_by_question_type.csv   accuracy by question type (no fact)
-    table7_reply_language.csv     share of replies in the language of the question
-    table8_sensitivity.csv        sensitivity checks: broader answer keys removed; "New York" replies counted correct
+Writes (results/analysis/; table numbers match the tables in Report 4, where Tables 1-3 are in the Methods):
+    table04_accuracy.csv          accuracy per chatbot and group, 95% Wilson confidence intervals
+    table05_h1_mcnemar.csv        H1: English vs Malay on the same questions, no fact (McNemar's exact test)
+    table06_h2_league_gap.csv     H2: is the English-Malay gap wider for Malaysia Super League than for NBA?
+    table06b_h2_logit.csv         H2: logistic regression correct ~ Malay * MSL (no fact, Wikidata)
+    table07_h3_fact_gap.csv       H3: does adding the fact shrink the English-Malay gap?
+    table08_h4_malay_wikipedia.csv H4: Malay Wikipedia page and accuracy (MSL players, no fact)
+    table09_by_question_type.csv  accuracy by question type (no fact)
+    reply_language.csv            share of replies in the language of the question (no table in the report)
+    table10_sensitivity.csv       sensitivity checks: broader answer keys removed; "New York" replies counted correct
     figures/fig1_accuracy_no_fact.png, fig2_fact_effect.png, fig3_malay_wikipedia.png
 
 Methods (also in README.md):
@@ -348,7 +348,7 @@ def h2_rows(check, h2_main, h2_sens):
 def sensitivity_table(df):
     rows = []
     h1_main = h1_table(df)
-    h2_main, _ = h2_tables(df, label="sensitivity")   # same numbers as table 3; skips refitting the logit
+    h2_main, _ = h2_tables(df, label="sensitivity")   # same numbers as table 6; skips refitting the logit
 
     # (a) leave out birthplace questions whose answer key is a state or a country
     check = "broader answer keys removed"
@@ -476,7 +476,7 @@ def figures(df):
         grouped_bars(ax, ["No Malay\nWikipedia page", "Has a Malay\nWikipedia page"], vals, bot)
     axes[0].set_ylabel("Accuracy, MSL players (no fact)", color=INK2)
     axes[-1].legend(frameon=False, loc="upper right", fontsize=10)
-    fig.text(0.01, 0.01, "Error bars: 95% Wilson confidence intervals. Not adjusted for site links (see table 5).", color=INK2, fontsize=9)
+    fig.text(0.01, 0.01, "Error bars: 95% Wilson confidence intervals. Not adjusted for site links (see Table 8).", color=INK2, fontsize=9)
     fig.tight_layout(rect=(0, 0.04, 1, 1))
     fig.savefig(FIG_DIR / "fig3_malay_wikipedia.png", dpi=200)
     plt.close(fig)
@@ -495,19 +495,19 @@ def main():
     df = load()
     print(f"Loaded {len(df)} scored replies: " + ", ".join(f"{b} {n}" for b, n in df["chatbot"].value_counts().items()))
 
-    t1 = save(accuracy_table(df), "table1_accuracy.csv")
-    t2 = save(h1_table(df), "table2_h1_mcnemar.csv")
+    t1 = save(accuracy_table(df), "table04_accuracy.csv")
+    t2 = save(h1_table(df), "table05_h1_mcnemar.csv")
     t3, t3b = h2_tables(df)
-    save(t3, "table3_h2_league_gap.csv")
-    save(t3b, "table3b_h2_logit.csv")
-    t4 = save(h3_table(df), "table4_h3_fact_gap.csv")
-    t5 = save(h4_table(df), "table5_h4_malay_wikipedia.csv")
-    save(by_type_table(df), "table6_by_question_type.csv")
-    t7 = save(reply_language_table(df), "table7_reply_language.csv")
-    t8 = save(sensitivity_table(df), "table8_sensitivity.csv")
+    save(t3, "table06_h2_league_gap.csv")
+    save(t3b, "table06b_h2_logit.csv")
+    t4 = save(h3_table(df), "table07_h3_fact_gap.csv")
+    t5 = save(h4_table(df), "table08_h4_malay_wikipedia.csv")
+    save(by_type_table(df), "table09_by_question_type.csv")
+    t7 = save(reply_language_table(df), "reply_language.csv")
+    t8 = save(sensitivity_table(df), "table10_sensitivity.csv")
     figures(df)
 
-    show("Table 1 (no fact): accuracy %", t1[t1["condition"] == "no fact"],
+    show("Table 4 (no fact): accuracy %", t1[t1["condition"] == "no fact"],
          ["chatbot", "set", "language", "n", "accuracy_pct", "ci_low_pct", "ci_high_pct"])
     show("H1: English vs Malay, same questions, no fact (McNemar)", t2)
     show("H2: English-Malay gap, MSL vs NBA (percentage points)", t3)
