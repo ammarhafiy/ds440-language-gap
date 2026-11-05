@@ -1,5 +1,0 @@
-﻿chatbot,league,n_questions,gap_no_fact_pct_points,gap_no_fact_ci,gap_with_fact_pct_points,gap_with_fact_ci,gap_shrinks_by_pct_points,ci_low,ci_high,p_paired_t
-Gemini 3.1 Flash-Lite,NBA,1055,0.38,"[-0.99, 1.74]",-0.19,"[-0.45, 0.07]",0.57,-0.82,1.96,0.4229
-Gemini 3.1 Flash-Lite,MSL,1003,0.0,"[-2.21, 2.21]",-0.5,"[-0.93, -0.06]",0.5,-1.74,2.74,0.6624
-SEA-LION v4.5,NBA,1055,0.95,"[-0.67, 2.57]",0.0,"[0.0, 0.0]",0.95,-0.67,2.57,0.2515
-SEA-LION v4.5,MSL,1003,0.8,"[-0.84, 2.43]",-0.1,"[-0.3, 0.1]",0.9,-0.75,2.54,0.2857

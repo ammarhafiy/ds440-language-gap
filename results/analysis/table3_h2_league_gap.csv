@@ -1,3 +1,0 @@
-﻿analysis,chatbot,n_nba,n_msl,gap_nba_pct_points,gap_msl_pct_points,gap_difference_msl_minus_nba,ci_low,ci_high,p_two_sided
-main,Gemini 3.1 Flash-Lite,1055,1003,0.38,0.0,-0.38,-2.98,2.22,0.775
-main,SEA-LION v4.5,1055,1003,0.95,0.8,-0.15,-2.45,2.15,0.8982

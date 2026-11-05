@@ -1,5 +1,0 @@
-﻿chatbot,language,test,n_with_page,acc_with_page_pct,ci_with_page,n_without_page,acc_without_page_pct,ci_without_page,or_page,or_page_ci,p_page,or_log_sitelinks,or_log_sitelinks_ci,p_log_sitelinks,n_replies
-Gemini 3.1 Flash-Lite,English,comparison,400,56.2,"[51.4, 61.0]",577,41.4,"[37.5, 45.5]",1.318,"[0.982, 1.769]",0.0655,4.335,"[3.249, 5.784]",0.0,977
-Gemini 3.1 Flash-Lite,Malay,H4,400,58.0,"[53.1, 62.7]",577,40.0,"[36.1, 44.1]",1.535,"[1.125, 2.094]",0.0068,4.96,"[3.590, 6.853]",0.0,977
-SEA-LION v4.5,English,comparison,400,9.0,"[6.6, 12.2]",577,14.4,"[11.8, 17.5]",0.536,"[0.348, 0.823]",0.0044,1.234,"[0.882, 1.726]",0.219,977
-SEA-LION v4.5,Malay,H4,400,10.0,"[7.4, 13.3]",577,12.5,"[10.0, 15.4]",0.765,"[0.488, 1.199]",0.2432,1.028,"[0.696, 1.517]",0.8899,977

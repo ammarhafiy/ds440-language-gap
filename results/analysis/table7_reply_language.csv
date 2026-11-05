@@ -1,9 +1,0 @@
-﻿chatbot,question_language,condition,replies,language_detectable,in_question_language_pct,unknown_pct
-Gemini 3.1 Flash-Lite,English,no fact,2137,956,100.0,55.3
-Gemini 3.1 Flash-Lite,English,with fact,2058,109,96.3,94.7
-Gemini 3.1 Flash-Lite,Malay,no fact,2137,2072,99.9,3.0
-Gemini 3.1 Flash-Lite,Malay,with fact,2058,2022,100.0,1.7
-SEA-LION v4.5,English,no fact,2137,704,100.0,67.1
-SEA-LION v4.5,English,with fact,2058,39,89.7,98.1
-SEA-LION v4.5,Malay,no fact,2137,2051,99.8,4.0
-SEA-LION v4.5,Malay,with fact,2058,109,85.3,94.7

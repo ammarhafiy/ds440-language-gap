@@ -1,9 +1,0 @@
-﻿chatbot,questions,n_pairs,english_pct,malay_pct,diff_pct_points,diff_ci_low,diff_ci_high,right_in_english_only,right_in_malay_only,mcnemar_p_two_sided,mcnemar_p_english_better
-Gemini 3.1 Flash-Lite,All (no fact),2137,67.7,67.5,0.19,-1.05,1.42,93,89,0.8241,0.412
-Gemini 3.1 Flash-Lite,NBA,1055,84.3,83.9,0.38,-0.99,1.74,29,25,0.6835,0.3417
-Gemini 3.1 Flash-Lite,MSL,1003,47.8,47.8,0.0,-2.21,2.21,64,64,1.0,0.5352
-Gemini 3.1 Flash-Lite,MKQA,79,100.0,100.0,0.0,0.0,0.0,0,0,1.0,1.0
-SEA-LION v4.5,All (no fact),2137,21.3,20.2,1.08,-0.08,2.23,91,68,0.0807,0.0404
-SEA-LION v4.5,NBA,1055,25.1,24.2,0.95,-0.67,2.57,43,33,0.3019,0.1509
-SEA-LION v4.5,MSL,1003,12.8,12.0,0.8,-0.84,2.43,39,31,0.403,0.2015
-SEA-LION v4.5,MKQA,79,78.5,72.2,6.33,-2.51,15.16,9,4,0.2668,0.1334
