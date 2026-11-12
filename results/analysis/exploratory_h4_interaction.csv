@@ -1,0 +1,9 @@
+﻿chatbot,term,odds_ratio,or_ci_low,or_ci_high,p,n_replies
+Gemini 3.1 Flash-Lite,Has a Malay Wikipedia page (English questions),1.311,0.972,1.769,0.076,1954
+Gemini 3.1 Flash-Lite,Malay question (no page),0.929,0.795,1.085,0.3534,1954
+Gemini 3.1 Flash-Lite,Page x Malay (interaction),1.173,0.919,1.498,0.2005,1954
+Gemini 3.1 Flash-Lite,log(1 + site links),4.625,3.498,6.115,0.0,1954
+SEA-LION v4.5,Has a Malay Wikipedia page (English questions),0.554,0.361,0.852,0.0071,1954
+SEA-LION v4.5,Malay question (no page),0.844,0.691,1.03,0.095,1954
+SEA-LION v4.5,Page x Malay (interaction),1.336,0.944,1.889,0.1017,1954
+SEA-LION v4.5,log(1 + site links),1.129,0.812,1.57,0.4713,1954

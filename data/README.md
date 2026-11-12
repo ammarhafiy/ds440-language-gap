@@ -211,6 +211,12 @@ The table numbers in the file names match the tables in Report 4 (Tables 1–3 a
 | `table09_by_question_type.csv` | Accuracy by question type (birthplace, birth year, home city, founding year, MKQA), no fact |
 | `reply_language.csv` | Share of replies in the language of the question (where the reply language could be detected) |
 | `table10_sensitivity.csv` | Main results next to the two sensitivity checks: accuracy, H1 (overall with 95% CI, and by league), H2 gap difference, and the replies changed by the New York check |
+| `exploratory_consistency.csv` | Exploratory (Discussion): questions answered correctly in only one language, as a share of those answered correctly in at least one, per chatbot and question set |
+| `exploratory_broad_keys.csv` | Exploratory: Malaysia Super League birthplace accuracy (no fact) by answer-key type (state or country, the key "Malaysia", town or city) and language, with the number of correct replies that name Kuala Lumpur |
+| `exploratory_default_replies.csv` | Exploratory: birthplace replies (no fact) that name Kuala Lumpur, the most common reply, and the share of players actually born in Kuala Lumpur, per chatbot, league and language |
+| `exploratory_site_links.csv` | Exploratory: Wikimedia site links of the 500 sampled players per league (mean, median, range) |
+| `exploratory_h4_interaction.csv` | Exploratory: logistic regression `correct ~ page * Malay + log(1 + site links) + question type` for Malaysia Super League players (no fact), clustered by player; the interaction tests whether the page effect is larger in Malay |
+| `exploratory_name_difference.csv` | Exploratory: the 116 questions whose Malay version uses a different name (from `data/raw/`): their accuracy, and H1/H2 with them left out |
 | `figures/fig1_accuracy_no_fact.png` | Accuracy without the fact, English vs Malay, by question set |
 | `figures/fig2_fact_effect.png` | Accuracy without and with the fact |
 | `figures/fig3_malay_wikipedia.png` | Accuracy for Malaysia Super League players with and without a Malay Wikipedia page |

@@ -19,6 +19,15 @@ Writes (results/analysis/; table numbers match the tables in Report 4, where Tab
     reply_language.csv            share of replies in the language of the question (no table in the report)
     table10_sensitivity.csv       sensitivity checks: broader answer keys removed; "New York" replies counted correct
     figures/fig1_accuracy_no_fact.png, fig2_fact_effect.png, fig3_malay_wikipedia.png
+  Exploratory checks used in the Discussion (descriptive; not hypothesis tests):
+    exploratory_consistency.csv      questions answered correctly in only one language, of those right in at least one
+    exploratory_broad_keys.csv       MSL birthplace accuracy by answer-key type (state/country vs town), and
+                                     correct replies naming Kuala Lumpur
+    exploratory_default_replies.csv  birthplace replies naming Kuala Lumpur, and the most common reply, per league
+    exploratory_site_links.csv       Wikimedia site links of the sampled players, per league
+    exploratory_h4_interaction.csv   H4 extension: correct ~ page * Malay + log(1 + site links) + question type
+    exploratory_name_difference.csv  questions whose Malay version uses a different name: accuracy, and H1/H2
+                                     without them (names from data/raw/)
 
 Methods (also in README.md):
 - Accuracy: share of replies scored correct, with 95% Wilson confidence intervals.
@@ -61,6 +70,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SCORED_DIR = ROOT / "data" / "scored"
 QUESTIONS_PATH = ROOT / "data" / "questions" / "questions_final.csv"
 COARSE_PATH = ROOT / "data" / "coarse_answer_keys.csv"
+RAW_DIR = ROOT / "data" / "raw"
 OUT_DIR = ROOT / "results" / "analysis"
 FIG_DIR = OUT_DIR / "figures"
 
@@ -482,6 +492,132 @@ def figures(df):
     plt.close(fig)
 
 
+# ---------- exploratory checks (used in the Discussion; not hypothesis tests) ----------
+
+def name_diff_ids():
+    """Wikidata items (players and clubs) whose Malay name differs from their English name."""
+    ids = set()
+    for lg in ["msl", "nba"]:
+        for kind, col in [("players", "player_qid"), ("clubs", "club_qid")]:
+            path = RAW_DIR / f"{kind}_{lg}.csv"
+            if path.exists():
+                d = pd.read_csv(path, dtype=str, keep_default_na=False, encoding="utf-8-sig")
+                ids |= set(d.loc[(d["name_ms"] != "") & (d["name_ms"] != d["name_en"]), col])
+    return ids
+
+
+def consistency_table(df):
+    """How often a question is answered correctly in only one of the two languages (no fact)."""
+    w = paired(df)
+    rows = []
+    for bot, g in w.groupby("chatbot"):
+        for name, h in [("All", g)] + [(s, g[g["set"] == s]) for s in ["NBA", "MSL", "MKQA"]]:
+            both = int(((h["en"] == 1) & (h["ms"] == 1)).sum())
+            one = int((h["en"] != h["ms"]).sum())
+            rows.append({"chatbot": bot, "questions": name, "n_questions": len(h), "right_in_both": both,
+                         "right_in_one_language_only": one, "right_in_at_least_one": both + one,
+                         "pct_one_only_of_at_least_one": pct(one / (both + one)) if both + one else np.nan})
+    return pd.DataFrame(rows)
+
+
+def birthplace_no_fact(df, league="msl"):
+    return df[(df["league"] == league) & (df["property"] == "birthplace") & (df["condition"] == "no_facts")]
+
+
+def broad_keys_table(df):
+    """MSL birthplace accuracy by answer-key type; how many correct replies name Kuala Lumpur."""
+    b = birthplace_no_fact(df)
+    groups = [("broad (state or country)", b["coarse_key"]),
+              ("broad, answer key 'Malaysia'", b["coarse_key"] & (b["answer_en"] == "Malaysia")),
+              ("town or city", ~b["coarse_key"])]
+    rows = []
+    for bot in b["chatbot"].unique():
+        for label, mask in groups:
+            for lang in ["en", "ms"]:
+                g = b[mask & (b["chatbot"] == bot) & (b["language"] == lang)]
+                c = g[g["correct"] == 1]
+                rows.append({"chatbot": bot, "answer_key": label, "language": LANGS[lang], "questions": len(g),
+                             "correct": len(c), "accuracy_pct": pct(c.shape[0] / len(g)) if len(g) else np.nan,
+                             "correct_replies_naming_kuala_lumpur": int(c["response"].str.lower().str.contains("kuala lumpur").sum())})
+    return pd.DataFrame(rows)
+
+
+def default_replies_table(df):
+    """Birthplace questions without the fact: how often a reply names Kuala Lumpur, and the most common reply."""
+    rows = []
+    for lg in ["msl", "nba"]:
+        b = birthplace_no_fact(df, lg)
+        born_kl = b.drop_duplicates("question_id")["answer_en"].eq("Kuala Lumpur")
+        for bot in b["chatbot"].unique():
+            for lang, g in [("both", b[b["chatbot"] == bot])] + [(LANGS[l], b[(b["chatbot"] == bot) & (b["language"] == l)]) for l in ["en", "ms"]]:
+                top = g["response"].str.strip().value_counts(normalize=True)
+                rows.append({"chatbot": bot, "league": SETS[lg], "language": lang, "replies": len(g),
+                             "pct_replies_naming_kuala_lumpur": pct(g["response"].str.lower().str.contains("kuala lumpur").mean()),
+                             "most_common_reply": top.index[0], "most_common_reply_pct": pct(top.iloc[0]),
+                             "players": int(born_kl.size), "pct_players_born_in_kuala_lumpur": pct(born_kl.mean())})
+    return pd.DataFrame(rows)
+
+
+def site_links_table(df):
+    p = df[df["entity_type"] == "player"].drop_duplicates("entity_qid")
+    s = pd.to_numeric(p["sitelinks"], errors="coerce")
+    return (p.assign(sitelinks_n=s).groupby("league")["sitelinks_n"]
+            .agg(players="size", mean="mean", median="median", min="min", max="max").round(1)
+            .rename(index=SETS).reset_index())
+
+
+def h4_interaction_table(df):
+    """Is the Malay Wikipedia page effect larger for Malay questions than for English ones?"""
+    d = df[(df["league"] == "msl") & (df["entity_type"] == "player") & (df["condition"] == "no_facts")]
+    names = {"has_ms_wiki": "Has a Malay Wikipedia page (English questions)", "malay": "Malay question (no page)",
+             "has_ms_wiki:malay": "Page x Malay (interaction)", "log_sitelinks": "log(1 + site links)"}
+    rows = []
+    for bot, g in d.groupby("chatbot"):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            fit = smf.logit("correct ~ has_ms_wiki * malay + log_sitelinks + C(property)", data=g).fit(
+                disp=False, cov_type="cluster", cov_kwds={"groups": pd.factorize(g["entity_qid"])[0]})
+        ci = fit.conf_int()
+        for term, label in names.items():
+            rows.append({"chatbot": bot, "term": label, "odds_ratio": round(math.exp(fit.params[term]), 3),
+                         "or_ci_low": round(math.exp(ci.loc[term, 0]), 3), "or_ci_high": round(math.exp(ci.loc[term, 1]), 3),
+                         "p": round(fit.pvalues[term], 4), "n_replies": int(fit.nobs)})
+    return pd.DataFrame(rows)
+
+
+def name_difference_table(df):
+    """Questions whose Malay version uses a different name: accuracy, and H1/H2 without them."""
+    diff = df["entity_qid"].isin(name_diff_ids())
+    keep = df[~diff]
+    rows = []
+    for bot in df["chatbot"].unique():
+        m = df[(df["chatbot"] == bot) & (df["league"] == "msl") & (df["source"] == "wikidata") & (df["condition"] == "no_facts")]
+        md = diff[m.index]
+        for flag, label in [(True, "different Malay name"), (False, "same name")]:
+            for lang in ["en", "ms"]:
+                g = m[(md == flag) & (m["language"] == lang)]
+                rows.append({"chatbot": bot, "measure": f"MSL accuracy %, {LANGS[lang]}, no fact, {label}",
+                             "value": pct(g["correct"].mean()), "n": len(g)})
+    h1_main, h1_keep = h1_table(df), h1_table(keep)
+    h2_main, h2_keep = h2_tables(df, label="sensitivity")[0], h2_tables(keep, label="sensitivity")[0]
+    for bot in df["chatbot"].unique():
+        for q in ["All (no fact)", "MSL"]:
+            a = h1_main[(h1_main["chatbot"] == bot) & (h1_main["questions"] == q)].iloc[0]
+            b = h1_keep[(h1_keep["chatbot"] == bot) & (h1_keep["questions"] == q)].iloc[0]
+            for tag, r in [("main", a), ("without different-name questions", b)]:
+                rows.append({"chatbot": bot, "measure": f"H1 {'overall' if q.startswith('All') else q}: English - Malay (points) [95% CI], McNemar p, {tag}",
+                             "value": f"{r['diff_pct_points']} [{r['diff_ci_low']}, {r['diff_ci_high']}] (p = {r['mcnemar_p_two_sided']})",
+                             "n": r["n_pairs"]})
+        for tag, t in [("main", h2_main), ("without different-name questions", h2_keep)]:
+            r = t[t["chatbot"] == bot].iloc[0]
+            rows.append({"chatbot": bot, "measure": f"H2 gap difference MSL - NBA (points), z-test p, {tag}",
+                         "value": f"{r['gap_difference_msl_minus_nba']} (p = {r['p_two_sided']})",
+                         "n": int(r["n_nba"] + r["n_msl"])})
+    n_q = df.loc[diff, "question_id"].nunique()
+    rows.insert(0, {"chatbot": "both", "measure": "questions whose Malay version uses a different name", "value": n_q, "n": n_q})
+    return pd.DataFrame(rows)
+
+
 # ---------- main ----------
 
 def show(title, table, cols=None):
@@ -505,6 +641,14 @@ def main():
     save(by_type_table(df), "table09_by_question_type.csv")
     t7 = save(reply_language_table(df), "reply_language.csv")
     t8 = save(sensitivity_table(df), "table10_sensitivity.csv")
+    ex = {"exploratory_consistency.csv": consistency_table(df),
+          "exploratory_broad_keys.csv": broad_keys_table(df),
+          "exploratory_default_replies.csv": default_replies_table(df),
+          "exploratory_site_links.csv": site_links_table(df),
+          "exploratory_h4_interaction.csv": h4_interaction_table(df),
+          "exploratory_name_difference.csv": name_difference_table(df)}
+    for name, table in ex.items():
+        save(table, name)
     figures(df)
 
     show("Table 4 (no fact): accuracy %", t1[t1["condition"] == "no fact"],
@@ -516,6 +660,8 @@ def main():
     show("H4: Malay Wikipedia page (MSL players, no fact)", t5)
     show("Reply language", t7)
     show("Sensitivity checks", t8)
+    for name, table in ex.items():
+        show(f"Exploratory: {name}", table)
     print(f"\nSaved tables in {OUT_DIR.relative_to(ROOT)}/ and figures in {FIG_DIR.relative_to(ROOT)}/")
 
 

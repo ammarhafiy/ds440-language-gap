@@ -1,0 +1,13 @@
+﻿chatbot,answer_key,language,questions,correct,accuracy_pct,correct_replies_naming_kuala_lumpur
+Gemini 3.1 Flash-Lite,broad (state or country),English,137,45,32.8,1
+Gemini 3.1 Flash-Lite,broad (state or country),Malay,137,33,24.1,1
+Gemini 3.1 Flash-Lite,"broad, answer key 'Malaysia'",English,26,18,69.2,1
+Gemini 3.1 Flash-Lite,"broad, answer key 'Malaysia'",Malay,26,1,3.8,1
+Gemini 3.1 Flash-Lite,town or city,English,349,140,40.1,7
+Gemini 3.1 Flash-Lite,town or city,Malay,349,144,41.3,14
+SEA-LION v4.5,broad (state or country),English,137,26,19.0,17
+SEA-LION v4.5,broad (state or country),Malay,137,31,22.6,22
+SEA-LION v4.5,"broad, answer key 'Malaysia'",English,26,17,65.4,17
+SEA-LION v4.5,"broad, answer key 'Malaysia'",Malay,26,22,84.6,22
+SEA-LION v4.5,town or city,English,349,65,18.6,14
+SEA-LION v4.5,town or city,Malay,349,47,13.5,15

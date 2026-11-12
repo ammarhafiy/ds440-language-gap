@@ -1,0 +1,9 @@
+﻿chatbot,questions,n_questions,right_in_both,right_in_one_language_only,right_in_at_least_one,pct_one_only_of_at_least_one
+Gemini 3.1 Flash-Lite,All,2137,1354,182,1536,11.8
+Gemini 3.1 Flash-Lite,NBA,1055,860,54,914,5.9
+Gemini 3.1 Flash-Lite,MSL,1003,415,128,543,23.6
+Gemini 3.1 Flash-Lite,MKQA,79,79,0,79,0.0
+SEA-LION v4.5,All,2137,364,159,523,30.4
+SEA-LION v4.5,NBA,1055,222,76,298,25.5
+SEA-LION v4.5,MSL,1003,89,70,159,44.0
+SEA-LION v4.5,MKQA,79,53,13,66,19.7

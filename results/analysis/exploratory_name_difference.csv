@@ -1,0 +1,22 @@
+﻿chatbot,measure,value,n
+both,questions whose Malay version uses a different name,116,116
+Gemini 3.1 Flash-Lite,"MSL accuracy %, English, no fact, different Malay name",58.6,116
+Gemini 3.1 Flash-Lite,"MSL accuracy %, Malay, no fact, different Malay name",50.0,116
+Gemini 3.1 Flash-Lite,"MSL accuracy %, English, no fact, same name",46.3,887
+Gemini 3.1 Flash-Lite,"MSL accuracy %, Malay, no fact, same name",47.5,887
+SEA-LION v4.5,"MSL accuracy %, English, no fact, different Malay name",12.9,116
+SEA-LION v4.5,"MSL accuracy %, Malay, no fact, different Malay name",12.9,116
+SEA-LION v4.5,"MSL accuracy %, English, no fact, same name",12.7,887
+SEA-LION v4.5,"MSL accuracy %, Malay, no fact, same name",11.8,887
+Gemini 3.1 Flash-Lite,"H1 overall: English - Malay (points) [95% CI], McNemar p, main","0.19 [-1.05, 1.42] (p = 0.8241)",2137
+Gemini 3.1 Flash-Lite,"H1 overall: English - Malay (points) [95% CI], McNemar p, without different-name questions","-0.3 [-1.52, 0.93] (p = 0.6928)",2021
+Gemini 3.1 Flash-Lite,"H1 MSL: English - Malay (points) [95% CI], McNemar p, main","0.0 [-2.21, 2.21] (p = 1.0)",1003
+Gemini 3.1 Flash-Lite,"H1 MSL: English - Malay (points) [95% CI], McNemar p, without different-name questions","-1.13 [-3.4, 1.15] (p = 0.3821)",887
+Gemini 3.1 Flash-Lite,"H2 gap difference MSL - NBA (points), z-test p, main",-0.38 (p = 0.775),2058
+Gemini 3.1 Flash-Lite,"H2 gap difference MSL - NBA (points), z-test p, without different-name questions",-1.51 (p = 0.2658),1942
+SEA-LION v4.5,"H1 overall: English - Malay (points) [95% CI], McNemar p, main","1.08 [-0.08, 2.23] (p = 0.0807)",2137
+SEA-LION v4.5,"H1 overall: English - Malay (points) [95% CI], McNemar p, without different-name questions","1.14 [-0.06, 2.34] (p = 0.075)",2021
+SEA-LION v4.5,"H1 MSL: English - Malay (points) [95% CI], McNemar p, main","0.8 [-0.84, 2.43] (p = 0.403)",1003
+SEA-LION v4.5,"H1 MSL: English - Malay (points) [95% CI], McNemar p, without different-name questions","0.9 [-0.86, 2.67] (p = 0.3817)",887
+SEA-LION v4.5,"H2 gap difference MSL - NBA (points), z-test p, main",-0.15 (p = 0.8982),2058
+SEA-LION v4.5,"H2 gap difference MSL - NBA (points), z-test p, without different-name questions",-0.05 (p = 0.97),1942

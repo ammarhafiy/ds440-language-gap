@@ -1,0 +1,13 @@
+﻿chatbot,league,language,replies,pct_replies_naming_kuala_lumpur,most_common_reply,most_common_reply_pct,players,pct_players_born_in_kuala_lumpur
+Gemini 3.1 Flash-Lite,MSL,both,972,16.6,He was born in Malaysia.,6.0,486,3.3
+Gemini 3.1 Flash-Lite,MSL,English,486,5.1,He was born in Malaysia.,11.9,486,3.3
+Gemini 3.1 Flash-Lite,MSL,Malay,486,28.0,Beliau dilahirkan di **Kuala Lumpur**.,2.9,486,3.3
+SEA-LION v4.5,MSL,both,972,51.1,"Kuala Lumpur, Malaysia",18.6,486,3.3
+SEA-LION v4.5,MSL,English,486,43.8,"Kuala Lumpur, Malaysia",37.2,486,3.3
+SEA-LION v4.5,MSL,Malay,486,58.4,Kuala Lumpur,0.4,486,3.3
+Gemini 3.1 Flash-Lite,NBA,both,970,0.1,"Chicago, Illinois.",1.4,485,0.0
+Gemini 3.1 Flash-Lite,NBA,English,485,0.0,"Chicago, Illinois.",2.9,485,0.0
+Gemini 3.1 Flash-Lite,NBA,Malay,485,0.2,"Beliau dilahirkan di Washington, D.C., Amerika Syarikat.",0.6,485,0.0
+SEA-LION v4.5,NBA,both,970,0.1,"New York City, New York",0.6,485,0.0
+SEA-LION v4.5,NBA,English,485,0.0,"New York City, New York",1.2,485,0.0
+SEA-LION v4.5,NBA,Malay,485,0.2,"Payton Pritchard dilahirkan di Seattle, Washington, Amerika Syarikat.",0.2,485,0.0
